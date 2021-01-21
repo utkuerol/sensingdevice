@@ -78,7 +78,7 @@ run commands ...
 
 # Additional Notes
 
-*Domain Microservice Template Version 1.0*
+*Domain Microservice Template Version 1.0.0*
 
 ### People in charge
 - Long-term responsible: 
