@@ -10,13 +10,14 @@
 
 ## Implementation and Tests
 
- [Installation](pages\installation.md) 
+ [Installation](pages\installation.md)
+
+  [DevOps](pages\devops.md)
 
  [Unit Tests](pages\unit_tests.md)
 
  [Integration Tests](pages\integration_tests.md)
 
- [DevOps](pages\devops.md) 
 
 ## Organization
 
