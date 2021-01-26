@@ -12,7 +12,7 @@
 
  [Local Installation](pages/installation.md)
 
- [DevOps Template](pages/devops.md)
+ [DevOps Template Configuration](pages/devops.md)
 
  [Unit Tests](pages/unit_tests.md)
 
