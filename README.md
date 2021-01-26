@@ -6,6 +6,8 @@
 
 ## Design
 
+ [Domain Entity View](pages/domain_entity_view.md)
+
  [API Specification](pages/api.md) 
 
 ## Implementation and Tests
