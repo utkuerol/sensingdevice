@@ -1,2 +1,2 @@
-# DevOps Configurations
+# DevOps Template Configuration
 
