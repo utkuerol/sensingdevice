@@ -12,7 +12,7 @@
 
  [Installation](pages\installation.md)
 
-  [DevOps](pages\devops.md)
+ [DevOps](pages\devops.md)
 
  [Unit Tests](pages\unit_tests.md)
 
