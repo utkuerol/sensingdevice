@@ -1,6 +1,6 @@
 # **`<Name>`** Domain Microservice
 
-Description
+`<Description>`
 
 *Guidelines for the creation of the artifacts are available in the GitLab documentation [Artifact Guidelines](https://git.scc.kit.edu/cm-tm/cm-team/1-1.cmdocumentation/3.artifactguidelines)*
 
