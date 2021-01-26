@@ -10,7 +10,9 @@
 
 ## Implementation and Tests
 
- [Installation](pages/installation.md)
+ [Local Installation](pages/installation.md)
+
+ [DevOps Templates](pages/devops.md)
 
  [Unit Tests](pages/unit_tests.md)
 
