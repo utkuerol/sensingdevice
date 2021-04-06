@@ -1,1 +1,1 @@
-# Domain Entity View
+# <Bounded Context> Entity Relation View
