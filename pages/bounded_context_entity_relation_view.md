@@ -1,1 +1,1 @@
-# <Bounded Context> Entity Relation View
+# Bounded Context Entity Relation View
