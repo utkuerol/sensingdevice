@@ -6,7 +6,7 @@
 
 ## Design
 
- [Domain Entity View](pages/domain_entity_view.md)
+ [Bounded Context Entity Relation View](pages/bounded_context_entity_relation_view.md)
 
  [API Specification](pages/api.md) 
 
