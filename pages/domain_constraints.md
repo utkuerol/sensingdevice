@@ -1,1 +1,1 @@
-# **`<Application Context>`** Domain Constraints 
+# **`<Bounded Context>`** Domain Constraints 
