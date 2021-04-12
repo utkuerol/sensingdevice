@@ -8,6 +8,8 @@
 
  [Bounded Context Entity Relation View](pages/bounded_context_entity_relation_view.md)
 
+ [Domain Constraints](pages/domain_constraints.md)
+
  [API Specification](pages/api.md) 
 
 ## Implementation and Tests
