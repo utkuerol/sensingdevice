@@ -1,1 +1,1 @@
-# **`<Bounded Context>`** Domain Constraints 
+# SensingDevice Domain Constraints 
