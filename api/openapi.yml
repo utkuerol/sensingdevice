@@ -1,0 +1,146 @@
+openapi: "3.0.2"
+info:
+  title: SensingDevice REST API
+  version: "1.0"
+  contact:
+    email: utku.erol@student.kit.edu
+servers:
+  - url: https://api.server.test/v1
+
+components:
+  schemas:
+    SensingDevice:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        serialNumber:
+          type: string
+          description: "Manufacturing ID given to the device by the manufacturer, unique per manufacturer and type."
+        manufacturer:
+          type: string
+          description: "The name of the manufacturer."
+        model:
+          type: string
+          description: "The model name."
+    Sensor:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: "name of the sensor, usually the model name provided by the manufacturer"
+        description:
+          type: string
+          description: "a short description of the sensor about what is measures etc."
+        metadata:
+          type: object
+    ObservedProperty:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "The name of the observed property."
+          example: "temperature, pressure, indoor position..."
+        description:
+          type: string
+          description: "A description of the observed property."
+        unitOfMeasurement:
+          type: string
+          description: "The unit of measurement."
+          example: "cm"
+    Datastream:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        observedProperty:
+          $ref: "#/components/schemas/ObservedProperty"
+        sensor:
+          $ref: "#/components/schemas/Sensor"
+        sensingDevice:
+          $ref: "#/components/schemas/SensingDevice"
+        observations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Observation"
+    Observation:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        unit:
+          type: string
+          description: "The unit of the observed value."
+          example: "cm, geojson, indoor position data"
+        value:
+          type: object
+        timestamp:
+          type: string
+          format: date-time
+          description: "Recorded time of the observation as defined by RFC 3339, section 5.6"
+          example: "2021-01-21T17:32:28Z."
+paths:
+  /test:
+    get:
+      responses:
+        "200":
+          description: OK
+  /devices/{uuid}/{observed-property}:
+    get:
+      summary: Gets all observations of a sensor's observed property within the time range.
+      description:
+        Gets all observations recorded by the given device's sensor with the given observed property from the
+        given date-time until the given date-time.
+        No whitespaces are allowed in the observed-property path variable.
+        If the name of the observed property includes whitespaces replace these with dashes (-).
+        E.g. "indoor position" -> "indoor-position".
+      parameters:
+        - in: query
+          name: from
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: to
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Datastream"
+        "404":
+          description: not found
+    delete:
+      description:
+        Deletes all observations recorded by the given device's sensor with the given observed property
+        from the given date-time until the given date-time.
+        No whitespaces are allowed in the observed-property path variable.
+        If the name of the observed property includes whitespaces replace these with dashes (-).
+        E.g. "indoor position" -> "indoor-position".
+      summary: Deletes all observations of a sensor's observed property within the time range.
+      parameters:
+        - in: query
+          name: from
+          schema:
+            type: string
+            format: date-time
+          required: true
+        - in: query
+          name: to
+          schema:
+            type: string
+            format: date-time
+          required: true
+      responses:
+        "200":
+          description: OK
