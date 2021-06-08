@@ -71,9 +71,6 @@ components:
     Observation:
       type: object
       properties:
-        uuid:
-          type: string
-          format: uuid
         unit:
           type: string
           description: "The unit of the observed value."
@@ -85,17 +82,155 @@ components:
           format: date-time
           description: "Recorded time of the observation as defined by RFC 3339, section 5.6"
           example: "2021-01-21T17:32:28Z."
+
 paths:
-  /test:
+  /devices:
     get:
+      description: Gets all sensing devices.
+      summary: Gets all sensing devices.
       responses:
         "200":
           description: OK
-  /devices/{uuid}/{observed-property}:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SensingDevice"
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden
+    post:
+      description: Creates a new sensing device.
+      summary: Creates a new sensing device.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serialNumber:
+                  type: string
+                manufacturer:
+                  type: string
+                model:
+                  type: string
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+  /devices/{uuid}/sensors/{uuid}/observations:
+    post:
+      summary: Creates a new observation made by the sensing device's sensor.
+      description: Creates a new observation made by the sensing device's sensor.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: object
+      responses:
+        "201":
+          description: OK
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+  /devices/{uuid}/sensors:
     get:
-      summary: Gets all observations of a sensor's observed property within the time range.
+      description: Gets all sensors belonging to the sensing device.
+      summary: Gets all sensors belonging to the sensing device.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Sensor"
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden
+    post:
+      description: Creates a new sensor belonging to the given sensing device and responds with the persisted UUID on success.
+      summary: Creates a new sensor belonging to the given sensing device.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: "name of the sensor, usually the model name provided by the manufacturer"
+                description:
+                  type: string
+                  description: "a short description of the sensor about what is measures etc."
+                metadata:
+                  type: object
+                observedProperty:
+                  $ref: "#/components/schemas/ObservedProperty"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+  /devices/{uuid}/datastreams:
+    get:
+      summary: Gets all datastreams of the given sensing device.
+      description: Gets all datastreams of the given sensing device excluding the belonging observations.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    uuid:
+                      type: string
+                      format: uuid
+                    observedProperty:
+                      $ref: "#/components/schemas/ObservedProperty"
+                    sensor:
+                      $ref: "#/components/schemas/Sensor"
+                    sensingDevice:
+                      $ref: "#/components/schemas/SensingDevice"
+        "403":
+          description: Forbidden
+  /devices/{uuid}/datastreams/{observed-property}/observations:
+    get:
+      summary: Gets all observations of a device's observed property within the time range.
       description:
-        Gets all observations recorded by the given device's sensor with the given observed property from the
+        Gets all observations recorded by the given sensing device with the given observed property from the
         given date-time until the given date-time.
         No whitespaces are allowed in the observed-property path variable.
         If the name of the observed property includes whitespaces replace these with dashes (-).
@@ -119,15 +254,17 @@ paths:
               schema:
                 $ref: "#/components/schemas/Datastream"
         "404":
-          description: not found
+          description: Not Found
+        "403":
+          description: Forbidden
     delete:
       description:
-        Deletes all observations recorded by the given device's sensor with the given observed property
+        Deletes all observations recorded by the given sensing device with the given observed property
         from the given date-time until the given date-time.
         No whitespaces are allowed in the observed-property path variable.
         If the name of the observed property includes whitespaces replace these with dashes (-).
         E.g. "indoor position" -> "indoor-position".
-      summary: Deletes all observations of a sensor's observed property within the time range.
+      summary: Deletes all observations of a device's observed property within the time range.
       parameters:
         - in: query
           name: from
@@ -144,3 +281,5 @@ paths:
       responses:
         "200":
           description: OK
+        "403":
+          description: Forbidden
