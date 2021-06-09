@@ -90,10 +90,6 @@ components:
           format: date-time
           description: "Recorded time of the observation as defined by RFC 3339, section 5.6"
           example: "2021-01-21T17:32:28Z."
-        unit:
-          type: string
-          description: "The unit of the observed value."
-          example: "indoor position"
         value:
           type: object
           example: {facilityName: Städtisches Klinikum Karlsruhe, roomName: C101.8, floorLevel: 1, coordinates: '(15.7, 42.0)'}
