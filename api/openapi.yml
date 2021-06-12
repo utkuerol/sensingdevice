@@ -1,0 +1,496 @@
+openapi: "3.0.2"
+info:
+  title: SensingDevice REST API
+  version: "1.0"
+  contact:
+    email: utku.erol@student.kit.edu
+servers:
+  - url: https://api.server.test/v1
+
+components:
+  schemas:
+    SensingDevice:
+      type: object
+      properties:
+        id:
+          type: string
+        serialNumber:
+          type: string
+          description: Manufacturing ID given to the device by the manufacturer, unique per manufacturer and type.
+          example: C02TXHZUHV29
+        manufacturer:
+          type: string
+          description: "The name of the manufacturer."
+          example: Siemens
+        model:
+          type: string
+          description: "The model name."
+          example: MAGNETOM Free.Max
+        sensors:
+          type: array
+          items:
+            $ref: "#/components/schemas/Sensor"
+    Sensor:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Local id of a sensor. Unique per sensing device.
+          example: "2"
+        name:
+          type: string
+          description: Name of the sensor, usually the model name provided by the manufacturer.
+          example: BOSCH BLE Tag
+        description:
+          type: string
+          description: A short description of the sensor about what is measures etc.
+          example: Locates a device indoors using relative distances to installed BLE beacons
+        metadata:
+          type: object
+        datastreams:
+          type: array
+          items:
+            $ref: "#/components/schemas/DatastreamWithoutObservations"
+    ObservedProperty:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "The name of the observed property."
+          example: "indoor position"
+        description:
+          type: string
+          description: "A description of the observed property."
+          example: Indoor position includes the facility name, room name,
+            floor level and 2D in-room coordinates of a device.
+            Check the middleware documentation at https://fake-middleware-devicelocator.com.
+        unitOfMeasurement:
+          type: string
+          description: "The unit of measurement."
+          example: "indoor position (check the middleware documentation for the data structure 
+          at https://fake-middleware-devicelocator.com)"
+    Datastream:
+      type: object
+      properties:
+        observedProperty:
+          $ref: "#/components/schemas/ObservedProperty"
+        observations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Observation"
+    DatastreamWithoutObservations:
+      type: object
+      properties:
+        observedProperty:
+          $ref: "#/components/schemas/ObservedProperty"
+    Observation:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: "Recorded time of the observation as defined by RFC 3339, section 5.6"
+          example: "2021-01-21T17:32:28Z."
+        value:
+          type: object
+          example: {facilityName: Städtisches Klinikum Karlsruhe, roomName: C101.8, floorLevel: 1, coordinates: '(15.7, 42.0)'}
+
+paths:
+  /devices:
+    get:
+      description: Gets all sensing devices.
+      summary: Gets all sensing devices.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SensingDevice"
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden
+    post:
+      description: Creates a new sensing device.
+      summary: Creates a new sensing device.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serialNumber:
+                  type: string
+                manufacturer:
+                  type: string
+                model:
+                  type: string
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SensingDevice"
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+  /devices/{id}:
+    get:
+        description: Gets a sensing device.
+        summary: Gets a sensing device.
+        parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        responses:
+          "200":
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/SensingDevice"
+          "404":
+            description: Not Found
+          "403":
+            description: Forbidden
+    delete:
+      description: Deletes a sensing device.
+      summary: Deletes a sensing device.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden        
+  /devices/{id}/sensors:
+    get:
+      summary: Gets all sensors belonging to the sensing device.
+      description: Gets all sensors belonging to the sensing device with their observed properties.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Sensor"
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden
+    post:
+      description: Creates a new sensor belonging to the given sensing device and responds with the created entity.
+      summary: Creates a new sensor belonging to the given sensing device.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: "name of the sensor, usually the model name provided by the manufacturer"
+                description:
+                  type: string
+                  description: "a short description of the sensor about what is measures etc."
+                metadata:
+                  type: object
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sensor"
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+  /devices/{id}/sensors/{id}:
+    get:
+        description: Gets a sensor.
+        summary: Gets a sensor.
+        responses:
+          "200":
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Sensor"
+          "404":
+            description: Not Found
+          "403":
+            description: Forbidden
+    delete:
+      description: Deletes a sensor.
+      summary: Deletes a sensor.
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden        
+  /devices/{id}/sensors/{id}/observations:
+    get:
+      summary: Gets all observations recorded by the sensor within the time range.
+      description:
+          Gets all observations recorded by the sensor within the time range.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: from
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: to
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Datastream"
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden
+    post:
+        summary: Creates a new observation made by the sensor.
+        description: Creates a new observation made by the sensor.
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: string
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  observedProperty:
+                    type: object
+                    $ref: "#/components/schemas/ObservedProperty"
+                  value:
+                    type: object
+                    example: {facilityName: Städtisches Klinikum Karlsruhe, roomName: C101.8, floorLevel: 1, coordinates: '(15.7, 42.0)'}
+        responses:
+          "201":
+            description: Created
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Observation"
+          "400":
+            description: Bad Request
+          "403":
+            description: Forbidden
+  /devices/{id}/sensors/{id}/observations/{observed-property}:
+    get:
+        summary: Gets all observations on an observed property made by the sensor within the time range.
+        description:
+          Gets all observations on an observed property of the sensing device made by the sensor within the time range.
+          observed-property is the name of the observed property written in kebab-case.
+          E.g. "indoor position" -> "indoor-position"
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: string
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: string
+          - in: path
+            name: observed-property
+            required: true
+            schema:
+              type: string
+              format: kebab-case
+          - in: query
+            name: from
+            schema:
+              type: string
+              format: date-time
+          - in: query
+            name: to
+            schema:
+              type: string
+              format: date-time
+        responses:
+          "200":
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Datastream"
+          "404":
+            description: Not Found
+          "403":
+            description: Forbidden
+    delete:
+          summary: Deletes all observations on an observed property of the sensing device made by the sensor within the time range.
+          description:
+            Deletes all observations on an observed property of the sensing device made by the sensor within the time range.
+            observed-property is the name of the observed property written in kebab-case.
+            E.g. "indoor position" -> "indoor-position"
+          parameters:
+            - in: path
+              name: id
+              required: true
+              schema:
+                type: string
+            - in: path
+              name: id
+              required: true
+              schema:
+                type: string
+            - in: path
+              name: observed-property
+              required: true
+              schema:
+                type: string
+                format: kebab-case
+            - in: query
+              name: from
+              schema:
+                type: string
+                format: date-time
+              required: true
+            - in: query
+              name: to
+              schema:
+                type: string
+                format: date-time
+              required: true
+          responses:
+            "204":
+              description: No Content
+            "403":
+              description: Forbidden
+  /devices/{id}/observations/{observed-property}:
+    get:
+      summary: Gets all observations on an observed property of the sensing device within the time range.
+      description:
+        Gets all observations on an observed property of the sensing device within the time range.
+        observed-property is the name of the observed property written in kebab-case.
+        E.g. "indoor position" -> "indoor-position"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: observed-property
+          required: true
+          schema:
+            type: string
+            format: kebab-case
+        - in: query
+          name: from
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: to
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Datastream"
+        "404":
+          description: Not Found
+        "403":
+          description: Forbidden
+    delete:
+      summary: Deletes all observations on an observed property of the sensing device within the time range.
+      description:
+        Deletes all observations from a datastream within the time range.
+        observed-property is the name of the observed property written in kebab-case.
+        E.g. "indoor position" -> "indoor-position"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: observed-property
+          required: true
+          schema:
+            type: string
+            format: kebab-case
+        - in: query
+          name: from
+          schema:
+            type: string
+            format: date-time
+          required: true
+        - in: query
+          name: to
+          schema:
+            type: string
+            format: date-time
+          required: true
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: Forbidden
