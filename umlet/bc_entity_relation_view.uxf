@@ -1,0 +1,50 @@
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>390</x><y>130</y><w>140</w><h>80</h></coordinates><panel_attributes>&lt;&lt;shared entity&gt;&gt;
+Observation
+--
+- value: Any 
+- timestamp: DateTime</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>640</x><y>130</y><w>420</w><h>110</h></coordinates><panel_attributes>&lt;&lt;shared entity&gt;&gt;
+Datastream
+--
+--
++ insert(observation: Observation) 
++ getObservations(): Collection&lt;Observation&gt;
++ getObservations(start: DateTime, end: DateTime): Collection&lt;Observation&gt;
++ join(datastream: Datastream): Datastream</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>620</x><y>590</y><w>450</w><h>180</h></coordinates><panel_attributes>&lt;&lt;entity&gt;&gt;
+SensingDevice
+--
+- serialNumber: String
+- manufacturer: String
+- model: String
+--
++ addSensor(name: String, description: String, metadata: Any)
++ removeSensor(sensor: Sensor)
++ observe(sensor: Sensor, property: ObservedProperty, observation: Observation)
++ getObservations(sensor: Sensor): Collection&lt;Datastream&gt;
++ getObservations(sensor: Sensor, property: ObservedProperty): Datastream
++ getObservations(property: ObservedProperty): Datastream </panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>840</x><y>460</y><w>50</w><h>150</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1= 1
+m2=1..*
+has</panel_attributes><additional_attributes>10;130;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>520</x><y>160</y><w>140</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+
+m1=1
+m2=0..*
+</panel_attributes><additional_attributes>120;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>360</x><y>360</y><w>200</w><h>90</h></coordinates><panel_attributes>&lt;&lt;value object&gt;&gt;
+ObservedProperty
+--
+-name: String
+-description: String
+-unitOfMeasurement: String</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>490</x><y>230</y><w>180</w><h>150</h></coordinates><panel_attributes>lt=&lt;-
+m1=   1
+m2=1..*
+r1= - property
+r1pos=-50,5</panel_attributes><additional_attributes>40;130;150;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>640</x><y>360</y><w>420</w><h>110</h></coordinates><panel_attributes>&lt;&lt;entity&gt;&gt;
+Sensor
+--
+- name: String
+- description: String
+- metadata: Any
+--
++ observe(property: ObservedProperty, observation: Observation)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>790</x><y>230</y><w>130</w><h>140</h></coordinates><panel_attributes>lt=&lt;-[observedProperty]
+
+m1=1
+m2=1..*</panel_attributes><additional_attributes>60;10;60;120</additional_attributes></element></diagram>
