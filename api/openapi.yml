@@ -143,6 +143,12 @@ paths:
     get:
         description: Gets a sensing device.
         summary: Gets a sensing device.
+        parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
         responses:
           "200":
             description: OK
@@ -157,6 +163,12 @@ paths:
     delete:
       description: Deletes a sensing device.
       summary: Deletes a sensing device.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
       responses:
         "204":
           description: No Content
