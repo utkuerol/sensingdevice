@@ -27,8 +27,8 @@
 
 *Documentation Template Version 1.0.0*
 
-| Documentation Responsible | Start | End  |
-| ------------------------- | ----- | ---- |
-| ---                       | ---   | ---  |
+| Documentation Responsible | Start     | End       |
+| ------------------------- | --------- | --------- |
+| Utku Erol                 | 10.6.2021 | 23.7.2021 |
 
 

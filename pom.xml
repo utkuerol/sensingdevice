@@ -8,7 +8,7 @@
 		<version>2.5.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>edu.kit.tm.cm</groupId>
+	<groupId>edu.kit.tm.cm.iot</groupId>
 	<artifactId>sensingdevice</artifactId>
   	<version>1.0-SNAPSHOT</version>
 	<name>sensingdevice</name>
