@@ -35,9 +35,13 @@ public class SensingDevice {
         this.manufacturer = manufacturer;
         this.model = model;
         this.id = UUID.randomUUID().toString().toUpperCase();
+        this.sensors = new ArrayList<Sensor>();
     }
 
     public void addSensor(String name, String description, String metadata) {
+        if (name == "") {
+            throw new IllegalArgumentException("Name of a Sensor cannot be empty");
+        }
         Sensor sensor = new Sensor(name, description, metadata);
         this.sensors.add(sensor);
     }
