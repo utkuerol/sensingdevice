@@ -6,12 +6,16 @@ import java.util.Collections;
 import java.util.List;
 
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@ToString
 public class Datastream {
 
     private List<Observation> observations;
 
-    @Getter
     private ObservedProperty observedProperty;
 
     public Datastream(ObservedProperty observedProperty) {

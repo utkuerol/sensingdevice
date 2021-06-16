@@ -1,33 +1,27 @@
 package edu.kit.tm.cm.iot.sensingdevice.logic.model;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
-@EqualsAndHashCode
+@Setter
+@ToString
 public class SensingDevice {
 
-    private String id;
+    private final String id;
 
-    @Setter
     private String serialNumber;
 
-    @Setter
     private String manufacturer;
 
-    @Setter
     private String model;
 
-    @Getter
     private List<Sensor> sensors;
 
     public SensingDevice(String serialNumber, String manufacturer, String model) {
@@ -47,6 +41,9 @@ public class SensingDevice {
     }
 
     public void removeSensor(@NonNull Sensor sensor) {
+        if (!sensorIsAttached(sensor)) {
+            throw new IllegalArgumentException("Given Sensor is not attached to the SensingDevice");
+        }
         this.sensors.remove(sensor);
     }
 
@@ -84,8 +81,19 @@ public class SensingDevice {
         return combinedDatastream;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof SensingDevice) {
+            var device = (SensingDevice) obj;
+            if (device.getId().equals(this.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean sensorIsAttached(Sensor sensor) {
-        return !this.sensors.contains(sensor);
+        return this.sensors.contains(sensor);
     }
 
     private Sensor findSensor(Sensor sensor) {
@@ -93,4 +101,5 @@ public class SensingDevice {
         var s = this.sensors.get(i);
         return s;
     }
+
 }

@@ -4,23 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
-@EqualsAndHashCode
+@Setter
+@NoArgsConstructor
+@ToString
 public class Sensor {
 
     private String id;
 
-    @Setter
     private String name;
 
-    @Setter
     private String description;
 
-    @Setter
     private String metadata;
 
     private List<Datastream> datastreams;
@@ -35,18 +35,29 @@ public class Sensor {
 
     public void observe(ObservedProperty observedProperty, Observation observation) {
         var existingDatastreams = this.datastreams.stream()
-                .filter(d -> d.getObservedProperty().equals(observedProperty));
-        if (existingDatastreams.count() > 1) {
+                .filter(d -> d.getObservedProperty().equals(observedProperty)).toList();
+        if (existingDatastreams.size() > 1) {
             throw new IllegalStateException(
                     "This sensor should not have had more than one datastream with the same observed property");
-        } else if (existingDatastreams.count() == 1) {
-            var d = existingDatastreams.toList().get(0);
+        } else if (existingDatastreams.size() == 1) {
+            var d = existingDatastreams.get(0);
             d.insert(observation);
         } else {
             var d = new Datastream(observedProperty);
             d.insert(observation);
             this.datastreams.add(d);
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Sensor) {
+            var sensor = (Sensor) obj;
+            if (sensor.getId().equals(this.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
