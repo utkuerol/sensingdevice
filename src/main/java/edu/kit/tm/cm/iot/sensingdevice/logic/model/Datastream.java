@@ -1,8 +1,6 @@
 package edu.kit.tm.cm.iot.sensingdevice.logic.model;
 
 import java.time.Instant;
-import java.util.Collections;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
