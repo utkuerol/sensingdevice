@@ -7,11 +7,16 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class SensingDeviceUnitTests {
 
@@ -53,7 +58,7 @@ public class SensingDeviceUnitTests {
         assertEquals(sensingDevice.getSerialNumber(), "serialNumber");
         assertEquals(sensingDevice.getManufacturer(), "manufacturer");
         assertEquals(sensingDevice.getModel(), "model");
-        assertEquals(checkInvariants(sensingDevice), true);
+        assertTrue(checkInvariants(validSensingDevice));
     }
 
     @Test
@@ -66,14 +71,14 @@ public class SensingDeviceUnitTests {
         assertDoesNotThrow(() -> UUID.fromString(validSensingDevice.getSensors().get(0).getId()));
         assertNotNull(validSensingDevice.getSensors().get(0).getDatastreams());
         assertEquals(0, validSensingDevice.getSensors().get(0).getDatastreams().size());
-        assertEquals(true, checkInvariants(validSensingDevice));
+        assertTrue(checkInvariants(validSensingDevice));
     }
 
     @Test
     public void addSensor_shouldThrowIllegalArgumentsException_invalidInput() {
         assertThrows(IllegalArgumentException.class, () -> validSensingDevice.addSensor("", "description", "metadata"));
         assertEquals(validSensingDevice.getSensors().size(), 0);
-        assertEquals(checkInvariants(validSensingDevice), true);
+        assertTrue(checkInvariants(validSensingDevice));
     }
 
     @Test
@@ -84,7 +89,7 @@ public class SensingDeviceUnitTests {
         validSensingDevice.removeSensor(temperatureSensor);
         assertEquals(1, validSensingDevice.getSensors().size());
         assertEquals(locationSensor, validSensingDevice.getSensors().get(0));
-        assertEquals(checkInvariants(validSensingDevice), true);
+        assertTrue(checkInvariants(validSensingDevice));
     }
 
     @Test
@@ -94,7 +99,7 @@ public class SensingDeviceUnitTests {
         assertThrows(IllegalArgumentException.class, () -> validSensingDevice.removeSensor(nonExistingSensor));
         assertThrows(IllegalArgumentException.class, () -> validSensingDevice.removeSensor(emptySensor));
         assertThrows(NullPointerException.class, () -> validSensingDevice.removeSensor(null));
-        assertEquals(checkInvariants(validSensingDevice), true);
+        assertTrue(checkInvariants(validSensingDevice));
     }
 
     @Test
@@ -106,23 +111,18 @@ public class SensingDeviceUnitTests {
         var locObservation = new Observation("location");
         validSensingDevice.observe(locationSensor, location, locObservation);
         validSensingDevice.observe(temperatureSensor, temperature, tempObservation);
-        assertEquals(true,
+        assertTrue(
                 temperatureSensor.getDatastreams().stream().anyMatch(d -> d.getObservedProperty().equals(temperature)));
-        assertEquals(true,
-                locationSensor.getDatastreams().stream().anyMatch(d -> d.getObservedProperty().equals(location)));
-        assertEquals(true,
-                temperatureSensor.getDatastreams().stream().filter(d -> d.getObservedProperty().equals(temperature))
-                        .findAny().get().getObservations().contains(tempObservation));
-        assertEquals(false,
-                temperatureSensor.getDatastreams().stream().filter(d -> d.getObservedProperty().equals(temperature))
-                        .findAny().get().getObservations().contains(locObservation));
-        assertEquals(true,
-                locationSensor.getDatastreams().stream().filter(d -> d.getObservedProperty().equals(location)).findAny()
-                        .get().getObservations().contains(locObservation));
-        assertEquals(false,
-                locationSensor.getDatastreams().stream().filter(d -> d.getObservedProperty().equals(location)).findAny()
-                        .get().getObservations().contains(tempObservation));
-        assertEquals(checkInvariants(validSensingDevice), true);
+        assertTrue(locationSensor.getDatastreams().stream().anyMatch(d -> d.getObservedProperty().equals(location)));
+        assertTrue(temperatureSensor.getDatastreams().stream().filter(d -> d.getObservedProperty().equals(temperature))
+                .findAny().get().getObservations().contains(tempObservation));
+        assertFalse(temperatureSensor.getDatastreams().stream().filter(d -> d.getObservedProperty().equals(temperature))
+                .findAny().get().getObservations().contains(locObservation));
+        assertTrue(locationSensor.getDatastreams().stream().filter(d -> d.getObservedProperty().equals(location))
+                .findAny().get().getObservations().contains(locObservation));
+        assertFalse(locationSensor.getDatastreams().stream().filter(d -> d.getObservedProperty().equals(location))
+                .findAny().get().getObservations().contains(tempObservation));
+        assertTrue(checkInvariants(validSensingDevice));
     }
 
     @Test
@@ -135,7 +135,7 @@ public class SensingDeviceUnitTests {
                 () -> validSensingDevice.observe(temperatureSensor, null, new Observation("value")));
         assertThrows(NullPointerException.class,
                 () -> validSensingDevice.observe(temperatureSensor, temperature, null));
-        assertEquals(checkInvariants(validSensingDevice), true);
+        assertTrue(checkInvariants(validSensingDevice));
     }
 
     @Test
@@ -146,10 +146,10 @@ public class SensingDeviceUnitTests {
         aggregateSensor.setDatastreams(datastreams);
         sensors.add(aggregateSensor);
         validSensingDevice.setSensors(sensors);
-        assertEquals(true, validSensingDevice.getObservations(aggregateSensor).contains(locationDS));
-        assertEquals(true, validSensingDevice.getObservations(aggregateSensor).contains(temperatureDS));
+        assertTrue(validSensingDevice.getObservations(aggregateSensor).contains(locationDS));
+        assertTrue(validSensingDevice.getObservations(aggregateSensor).contains(temperatureDS));
         assertEquals(2, validSensingDevice.getObservations(aggregateSensor).size());
-        assertEquals(checkInvariants(validSensingDevice), true);
+        assertTrue(checkInvariants(validSensingDevice));
     }
 
     @Test
@@ -162,19 +162,19 @@ public class SensingDeviceUnitTests {
         validSensingDevice.setSensors(sensors);
         assertEquals(locationDS, validSensingDevice.getObservations(aggregateSensor, location));
         assertEquals(temperatureDS, validSensingDevice.getObservations(aggregateSensor, temperature));
-        assertEquals(checkInvariants(validSensingDevice), true);
+        assertTrue(checkInvariants(validSensingDevice));
     }
 
     @Test
     public void getObservationsWithObservedProperty_shouldReturnNewMergedDatastream_validInput() {
-        var locationDSObs = new ArrayList<Observation>() {
+        var locationDSObs = new TreeSet<Observation>(Collections.reverseOrder()) {
             {
                 new Observation("1").setTimestamp(Instant.now().minusSeconds(1));
                 new Observation("2").setTimestamp(Instant.now().minusSeconds(100));
             }
         };
         locationDS.setObservations(locationDSObs);
-        var locationDS2Obs = new ArrayList<Observation>() {
+        var locationDS2Obs = new TreeSet<Observation>() {
             {
                 new Observation("5").setTimestamp(Instant.now().minusSeconds(1000));
                 new Observation("6").setTimestamp(Instant.now().minusSeconds(10000));
@@ -193,11 +193,11 @@ public class SensingDeviceUnitTests {
         validSensingDevice.setSensors(sensors);
         var mergedLocationDS = validSensingDevice.getObservations(location);
         assertEquals(location, mergedLocationDS.getObservedProperty());
-        assertEquals(true, mergedLocationDS.getObservations().containsAll(locationDS.getObservations()));
-        assertEquals(true, mergedLocationDS.getObservations().containsAll(locationDS2.getObservations()));
-        assertEquals(false, mergedLocationDS.getObservations().stream().anyMatch(
+        assertTrue(mergedLocationDS.getObservations().containsAll(locationDS.getObservations()));
+        assertTrue(mergedLocationDS.getObservations().containsAll(locationDS2.getObservations()));
+        assertFalse(mergedLocationDS.getObservations().stream().anyMatch(
                 o -> !locationDS.getObservations().contains(o) || !locationDS2.getObservations().contains(o)));
-        assertEquals(checkInvariants(validSensingDevice), true);
+        assertTrue(checkInvariants(validSensingDevice));
     }
 
     private boolean checkInvariants(SensingDevice device) {

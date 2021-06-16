@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -33,7 +34,7 @@ public class Sensor {
         this.datastreams = new ArrayList<>();
     }
 
-    public void observe(ObservedProperty observedProperty, Observation observation) {
+    public void observe(@NonNull ObservedProperty observedProperty, @NonNull Observation observation) {
         var existingDatastreams = this.datastreams.stream()
                 .filter(d -> d.getObservedProperty().equals(observedProperty)).toList();
         if (existingDatastreams.size() > 1) {
@@ -50,7 +51,7 @@ public class Sensor {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@NonNull Object obj) {
         if (obj instanceof Sensor) {
             var sensor = (Sensor) obj;
             if (sensor.getId().equals(this.getId())) {
