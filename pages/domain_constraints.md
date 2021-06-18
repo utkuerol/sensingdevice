@@ -3,7 +3,6 @@
 # Observation
 ```
 context Observation inv:
-    self.unit -> notEmpty()
     self.value -> notEmpty()
     self.timestamp -> notEmpty()
 ```

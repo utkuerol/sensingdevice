@@ -1,4 +1,4 @@
-package edu.kit.tm.cm.sensingdevice.sensingdevice;
+package edu.kit.tm.cm.iot.sensingdevice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
