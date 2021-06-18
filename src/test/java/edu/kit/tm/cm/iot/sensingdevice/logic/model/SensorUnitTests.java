@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -77,7 +79,7 @@ public class SensorUnitTests {
 
     private boolean checkInvariants(Sensor sensor) {
         var numDifferentObservedProperties = sensor.getDatastreams().stream().map(d -> d.getObservedProperty())
-                .distinct().toList().size();
+                .distinct().collect(Collectors.toList()).size();
         var numDatastreams = sensor.getDatastreams().size();
         return numDifferentObservedProperties == numDatastreams;
     }

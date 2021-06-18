@@ -12,10 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class SensingDeviceUnitTests {
 
@@ -166,7 +166,7 @@ public class SensingDeviceUnitTests {
 
     @Test
     public void getObservationsWithObservedProperty_shouldReturnNewMergedDatastream_validInput() {
-        var locationDSObs = new TreeSet<Observation>(Collections.reverseOrder()) {
+        var locationDSObs = new TreeSet<Observation>() {
             {
                 new Observation("1").setTimestamp(Instant.now().minusSeconds(1));
                 new Observation("2").setTimestamp(Instant.now().minusSeconds(100));
@@ -200,7 +200,8 @@ public class SensingDeviceUnitTests {
     }
 
     private boolean checkInvariants(SensingDevice device) {
-        return device.getSensors().stream().distinct().toList().size() == device.getSensors().size();
+        return device.getSensors().stream().distinct().collect(Collectors.toList()).size() == device.getSensors()
+                .size();
     }
 
 }

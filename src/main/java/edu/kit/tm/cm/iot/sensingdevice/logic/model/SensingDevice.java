@@ -3,7 +3,9 @@ package edu.kit.tm.cm.iot.sensingdevice.logic.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -12,9 +14,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 public class SensingDevice {
 
-    private final String id;
+    private String id;
 
     private String serialNumber;
 
@@ -74,7 +77,7 @@ public class SensingDevice {
         var combinedDatastream = new Datastream(observedProperty);
         var datastreams = this.sensors.stream()
                 .flatMap(s -> s.getDatastreams().stream().filter(d -> d.getObservedProperty().equals(observedProperty)))
-                .toList();
+                .collect(Collectors.toList());
         for (Datastream datastream : datastreams) {
             combinedDatastream = combinedDatastream.join(datastream);
         }
