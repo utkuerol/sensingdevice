@@ -1,6 +1,5 @@
 package edu.kit.tm.cm.iot.sensingdevice.infrastructure.persistence.repositories.dao;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;

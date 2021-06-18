@@ -30,25 +30,6 @@ public class SensingDeviceRepositoryImpl implements SensingDeviceRepository {
     }
 
     @Override
-    public Optional<SensingDevice> findByIdWithoutObservations(String deviceId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Optional<SensingDevice> findByIdWithObservationsFromDatastreamOnly(String deviceId, Datastream datastream) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Optional<SensingDevice> findByIdWithObservationsFromDatastreamsOnly(String deviceId,
-            Collection<Datastream> datastreams) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public void create(SensingDevice sensingDevice) {
         var sensingDevicePersistenceEntity = SensingDeviceMapper.toPersistenceEntity(sensingDevice);
         sensingDeviceDao.save(sensingDevicePersistenceEntity);
@@ -70,6 +51,25 @@ public class SensingDeviceRepositoryImpl implements SensingDeviceRepository {
     }
 
     @Override
+    public Optional<SensingDevice> findByIdWithoutObservations(String deviceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Optional<SensingDevice> findByIdWithObservationsFromDatastreamOnly(String deviceId, Datastream datastream) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Optional<SensingDevice> findByIdWithObservationsFromDatastreamsOnly(String deviceId,
+            Collection<Datastream> datastreams) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public void updateWithoutObservations(SensingDevice sensingDevice) {
         // TODO Auto-generated method stub
 
@@ -78,7 +78,6 @@ public class SensingDeviceRepositoryImpl implements SensingDeviceRepository {
     @Override
     public void updateWithObservationsFromDatastreamOnly(SensingDevice sensingDevice, Datastream datastream) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
