@@ -2,12 +2,14 @@ package edu.kit.tm.cm.iot.sensingdevice.logic.model;
 
 import java.time.Instant;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @ToString
 public class Observation implements Comparable<Observation> {
 
