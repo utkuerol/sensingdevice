@@ -3,6 +3,7 @@ package edu.kit.tm.cm.iot.sensingdevice.logic.model;
 import java.time.Instant;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,6 +12,7 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode
 public class Observation implements Comparable<Observation> {
 
     private String value;
@@ -25,4 +27,5 @@ public class Observation implements Comparable<Observation> {
     public int compareTo(Observation o) {
         return this.timestamp.compareTo(o.getTimestamp());
     }
+
 }

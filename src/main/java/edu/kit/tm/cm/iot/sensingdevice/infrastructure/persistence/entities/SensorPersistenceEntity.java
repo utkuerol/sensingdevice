@@ -1,5 +1,6 @@
 package edu.kit.tm.cm.iot.sensingdevice.infrastructure.persistence.entities;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -10,20 +11,20 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "sensors")
 public class SensorPersistenceEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private long id;
 
     private String uuid;
 
@@ -34,6 +35,6 @@ public class SensorPersistenceEntity {
     private String metadata;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<DatastreamPersistenceEntity> datastreams;
+    private List<DatastreamPersistenceEntity> datastreams = new LinkedList<>();
 
 }

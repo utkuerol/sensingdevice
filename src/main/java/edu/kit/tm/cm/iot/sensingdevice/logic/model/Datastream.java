@@ -6,6 +6,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,6 +15,7 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode
 public class Datastream {
 
     private SortedSet<Observation> observations;
@@ -51,4 +53,5 @@ public class Datastream {
         result.observations = joinedObservations;
         return result;
     }
+
 }

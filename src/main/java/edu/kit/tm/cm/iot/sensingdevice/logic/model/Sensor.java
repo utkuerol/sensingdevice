@@ -3,6 +3,7 @@ package edu.kit.tm.cm.iot.sensingdevice.logic.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,7 +39,7 @@ public class Sensor {
 
     public void observe(@NonNull ObservedProperty observedProperty, @NonNull Observation observation) {
         var existingDatastreams = this.datastreams.stream()
-                .filter(d -> d.getObservedProperty().equals(observedProperty)).toList();
+                .filter(d -> d.getObservedProperty().equals(observedProperty)).collect(Collectors.toList());
         if (existingDatastreams.size() > 1) {
             throw new IllegalStateException(
                     "This sensor should not have had more than one datastream with the same observed property");

@@ -1,5 +1,6 @@
 package edu.kit.tm.cm.iot.sensingdevice.infrastructure.persistence.entities;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -10,23 +11,23 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "datastreams")
 public class DatastreamPersistenceEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private long id;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<ObservationPersistenceEntity> observations;
+    private List<ObservationPersistenceEntity> observations = new LinkedList<>();
 
     private String observedPropertyName;
     private String observedPropertyDescription;
