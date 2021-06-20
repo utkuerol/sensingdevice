@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.kit.tm.cm.iot.sensingdevice.logic.model.SensingDevice;
 import edu.kit.tm.cm.iot.sensingdevice.logic.model.repositories.SensingDeviceRepository;
+import edu.kit.tm.cm.iot.sensingdevice.logic.operations.exceptions.SensingDeviceNotFoundException;
 
 @Service
 @Transactional
@@ -30,9 +31,10 @@ public class SensingDeviceOperations {
      * 
      * @param deviceId
      * @return SensingDevice with the deviceId
+     * @throws SensingDeviceNotFoundException
      */
-    public SensingDevice getSensingDevice(String deviceId) {
-        return sensingDeviceRepository.findById(deviceId).get();
+    public SensingDevice getSensingDevice(String deviceId) throws SensingDeviceNotFoundException {
+        return sensingDeviceRepository.findById(deviceId).orElseThrow(() -> new SensingDeviceNotFoundException());
     }
 
     /**
@@ -57,9 +59,12 @@ public class SensingDeviceOperations {
      * @param manufacturer
      * @param model
      * @return updated SensingDevice entity
+     * @throws SensingDeviceNotFoundException
      */
-    public SensingDevice updateSensingDevice(String deviceId, String serialNumber, String manufacturer, String model) {
-        var sensingDevice = sensingDeviceRepository.findById(deviceId).get();
+    public SensingDevice updateSensingDevice(String deviceId, String serialNumber, String manufacturer, String model)
+            throws SensingDeviceNotFoundException {
+        var sensingDevice = sensingDeviceRepository.findById(deviceId)
+                .orElseThrow(() -> new SensingDeviceNotFoundException());
         sensingDevice.setSerialNumber(serialNumber);
         sensingDevice.setModel(model);
         sensingDevice.setManufacturer(manufacturer);
@@ -71,10 +76,11 @@ public class SensingDeviceOperations {
      * Deletes the SensingDevice with the given deviceId
      * 
      * @param deviceId
+     * @throws SensingDeviceNotFoundException
      */
-    public void deleteSensingDevice(String deviceId) {
-        var sensingDevice = sensingDeviceRepository.findById(deviceId).get();
+    public void deleteSensingDevice(String deviceId) throws SensingDeviceNotFoundException {
+        var sensingDevice = sensingDeviceRepository.findById(deviceId)
+                .orElseThrow(() -> new SensingDeviceNotFoundException());
         sensingDeviceRepository.delete(sensingDevice);
     }
-
 }

@@ -1,6 +1,7 @@
 package edu.kit.tm.cm.iot.sensingdevice.logic.operations;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,6 +13,9 @@ import edu.kit.tm.cm.iot.sensingdevice.logic.model.Observation;
 import edu.kit.tm.cm.iot.sensingdevice.logic.model.ObservedProperty;
 import edu.kit.tm.cm.iot.sensingdevice.logic.model.Sensor;
 import edu.kit.tm.cm.iot.sensingdevice.logic.model.repositories.SensingDeviceRepository;
+import edu.kit.tm.cm.iot.sensingdevice.logic.operations.exceptions.SensingDeviceNotFoundException;
+import edu.kit.tm.cm.iot.sensingdevice.logic.operations.exceptions.SensorNotFoundException;
+import lombok.NonNull;
 
 public class ObservationOperations {
     private final SensingDeviceRepository sensingDeviceRepository;
@@ -22,32 +26,42 @@ public class ObservationOperations {
     }
 
     public List<Datastream> getObservationsOfSensor(String sensingDeviceId, String sensorId, Optional<Instant> start,
-            Optional<Instant> end) {
-        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId).orElseThrow();
+            Optional<Instant> end) throws SensingDeviceNotFoundException, SensorNotFoundException {
+        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId)
+                .orElseThrow(() -> new SensingDeviceNotFoundException());
         var sensor = this.findSensor(sensingDeviceId, sensorId);
         var datastreams = sensingDevice.getObservations(sensor);
-        datastreams = datastreams.stream().map(d -> this.applyTimeFilter(d, start, end)).collect(Collectors.toList());
-        return datastreams;
+        List<Datastream> filteredDatastreams = new ArrayList<Datastream>(datastreams);
+        // TODO this is only a shallow copy, make it deep!!!
+        filteredDatastreams = filteredDatastreams.stream().map(d -> this.applyTimeFilter(d, start, end))
+                .collect(Collectors.toCollection(ArrayList::new));
+        return filteredDatastreams;
     }
 
     public Datastream getObservationsOfSensorWithObservedProperty(String sensingDeviceId, String sensorId,
-            String observedPropertyName, Optional<Instant> start, Optional<Instant> end) {
-        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId).orElseThrow();
+            String observedPropertyName, @NonNull Optional<Instant> start, @NonNull Optional<Instant> end)
+            throws SensingDeviceNotFoundException, SensorNotFoundException {
+        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId)
+                .orElseThrow(() -> new SensingDeviceNotFoundException());
         var sensor = this.findSensor(sensingDeviceId, sensorId);
-        var datastream = sensingDevice.getObservations(sensor, new ObservedProperty(observedPropertyName, "", ""));
-        return applyTimeFilter(datastream, start, end);
+        var filteredDatastream = sensingDevice.getObservations(sensor,
+                new ObservedProperty(observedPropertyName, "", ""));
+        return applyTimeFilter(filteredDatastream, start, end);
     }
 
     public Datastream getObservationsWithObservedProperty(String sensingDeviceId, String observedPropertyName,
-            Optional<Instant> start, Optional<Instant> end) {
-        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId).orElseThrow();
+            @NonNull Optional<Instant> start, @NonNull Optional<Instant> end) throws SensingDeviceNotFoundException {
+        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId)
+                .orElseThrow(() -> new SensingDeviceNotFoundException());
         var datastream = sensingDevice.getObservations(new ObservedProperty(observedPropertyName, "", ""));
-        return applyTimeFilter(datastream, start, end);
+        var filteredDatastream = datastream;
+        return applyTimeFilter(filteredDatastream, start, end);
     }
 
     public Observation createObservation(String sensingDeviceId, String sensorId, ObservedProperty observedProperty,
-            String observedValue) {
-        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId).orElseThrow();
+            String observedValue) throws SensingDeviceNotFoundException, SensorNotFoundException {
+        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId)
+                .orElseThrow(() -> new SensingDeviceNotFoundException());
         var sensor = this.findSensor(sensingDeviceId, sensorId);
         var observation = new Observation(observedValue);
         sensingDevice.observe(sensor, observedProperty, observation);
@@ -56,8 +70,10 @@ public class ObservationOperations {
     }
 
     public void deleteObservationsOfSensorWithObservedProperty(String sensingDeviceId, String sensorId,
-            String observedPropertyName, Instant start, Instant end) {
-        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId).orElseThrow();
+            String observedPropertyName, @NonNull Instant start, @NonNull Instant end)
+            throws SensingDeviceNotFoundException, SensorNotFoundException {
+        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId)
+                .orElseThrow(() -> new SensingDeviceNotFoundException());
         var sensor = this.findSensor(sensingDeviceId, sensorId);
         var datastream = sensingDevice.getObservations(sensor, new ObservedProperty(observedPropertyName, "", ""));
         datastream = this.removeObservationsInTimeFilter(datastream, start, end);
@@ -65,8 +81,9 @@ public class ObservationOperations {
     }
 
     public void deleteObservationsWithObservedProperty(String sensingDeviceId, String observedPropertyName,
-            Instant start, Instant end) {
-        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId).orElseThrow();
+            @NonNull Instant start, @NonNull Instant end) throws SensingDeviceNotFoundException {
+        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId)
+                .orElseThrow(() -> new SensingDeviceNotFoundException());
         var datastreams = sensingDevice.getSensors().stream()
                 .flatMap(s -> s.getDatastreams().stream()
                         .filter(d -> d.getObservedProperty().getName().equals(observedPropertyName)))
@@ -75,21 +92,25 @@ public class ObservationOperations {
         sensingDeviceRepository.update(sensingDevice);
     }
 
-    private Datastream applyTimeFilter(Datastream datastream, Optional<Instant> start, Optional<Instant> end) {
+    private Datastream applyTimeFilter(@NonNull Datastream datastream, @NonNull Optional<Instant> start,
+            @NonNull Optional<Instant> end) {
         datastream.setObservations(datastream.getObservations(start.orElse(Instant.MIN), end.orElse(Instant.now())));
         return datastream;
     }
 
-    private Datastream removeObservationsInTimeFilter(Datastream datastream, Instant start, Instant end) {
+    private Datastream removeObservationsInTimeFilter(@NonNull Datastream datastream, @NonNull Instant start,
+            @NonNull Instant end) {
         datastream.getObservations().stream()
                 .dropWhile(o -> o.getTimestamp().isBefore(end) && o.getTimestamp().isAfter(start));
         return datastream;
     }
 
-    private Sensor findSensor(String sensingDeviceId, String sensorId) {
-        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId).orElseThrow();
+    private Sensor findSensor(String sensingDeviceId, String sensorId)
+            throws SensingDeviceNotFoundException, SensorNotFoundException {
+        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId)
+                .orElseThrow(() -> new SensingDeviceNotFoundException());
         var sensor = sensingDevice.getSensors().stream().filter(s -> s.getId().equals(sensorId)).findAny()
-                .orElseThrow();
+                .orElseThrow(() -> new SensorNotFoundException());
         return sensor;
     }
 
