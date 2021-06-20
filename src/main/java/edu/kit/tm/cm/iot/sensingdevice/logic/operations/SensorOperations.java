@@ -18,11 +18,67 @@ public class SensorOperations {
         this.sensingDeviceRepository = sensingDeviceRepository;
     }
 
-    public Sensor addSensor(String deviceId, String sensorName, String sensorDescription, String sensorMetadata) {
-        var sensingDevice = sensingDeviceRepository.findById(deviceId).get();
+    /**
+     * Adds new Sensor to the SensingDevice
+     * 
+     * @param sensingDeviceId
+     * @param sensorName
+     * @param sensorDescription
+     * @param sensorMetadata
+     * @return
+     */
+    public Sensor addSensor(String sensingDeviceId, String sensorName, String sensorDescription,
+            String sensorMetadata) {
+        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId).get();
         sensingDevice.addSensor(sensorName, sensorDescription, sensorMetadata);
         sensingDeviceRepository.update(sensingDevice);
         var addedSensor = sensingDevice.getSensors().get(sensingDevice.getSensors().size() - 1);
         return addedSensor;
+    }
+
+    /**
+     * Updates a Sensor of a SensingDevice
+     * 
+     * @param sensingDeviceId
+     * @param sensorId
+     * @param sensorName
+     * @param sensorDescription
+     * @param sensorMetadata
+     * @return
+     */
+    public Sensor updateSensor(String sensingDeviceId, String sensorId, String sensorName, String sensorDescription,
+            String sensorMetadata) {
+        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId).get();
+        var sensor = sensingDevice.getSensors().stream().filter(s -> s.getId().equals(sensorId)).findAny().get();
+        sensor.setDescription(sensorDescription);
+        sensor.setName(sensorName);
+        sensor.setMetadata(sensorMetadata);
+        sensingDeviceRepository.update(sensingDevice);
+        return sensor;
+    }
+
+    /**
+     * Deletes a Sensor of a SensingDevice
+     * 
+     * @param sensingDeviceId
+     * @param sensorId
+     */
+    public void deleteSensor(String sensingDeviceId, String sensorId) {
+        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId).get();
+        var sensor = sensingDevice.getSensors().stream().filter(s -> s.getId().equals(sensorId)).findAny().get();
+        sensingDevice.removeSensor(sensor);
+        sensingDeviceRepository.update(sensingDevice);
+    }
+
+    /**
+     * Gets the Sensor with the @param sensorId from the SensingDevice with
+     * the @param SensingDeviceId
+     * 
+     * @return found sensor
+     */
+    public Sensor getSensor(String sensingDeviceId, String sensorId) {
+        var sensingDevice = sensingDeviceRepository.findById(sensingDeviceId).get();
+        var sensor = sensingDevice.getSensors().stream().filter(s -> s.getId().equals(sensorId)).findAny().get();
+        return sensor;
     }
 }
