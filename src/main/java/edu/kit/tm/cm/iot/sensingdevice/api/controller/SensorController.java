@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.kit.tm.cm.iot.sensingdevice.api.SensorAPI;
-import edu.kit.tm.cm.iot.sensingdevice.api.dto.SensorDTO;
+import edu.kit.tm.cm.iot.sensingdevice.api.dto.requestObjects.CreateSensorRequestObject;
+import edu.kit.tm.cm.iot.sensingdevice.api.dto.responseObjects.SensorDTO;
 import edu.kit.tm.cm.iot.sensingdevice.logic.operations.SensorOperations;
 import edu.kit.tm.cm.iot.sensingdevice.logic.operations.exceptions.InvalidSensorException;
 import edu.kit.tm.cm.iot.sensingdevice.logic.operations.exceptions.SensingDeviceNotFoundException;
@@ -34,8 +35,9 @@ public class SensorController implements SensorAPI {
 
     @SneakyThrows
     @Override
-    public SensorDTO createSensor(String deviceId, String name, String description, String metadata) {
-        var createdSensor = sensorOperations.addSensor(deviceId, name, description, metadata);
+    public SensorDTO createSensor(String deviceId, CreateSensorRequestObject requestObject) {
+        var createdSensor = sensorOperations.addSensor(deviceId, requestObject.getName(),
+                requestObject.getDescription(), requestObject.getMetadata().toString());
         return new SensorDTO(createdSensor);
     }
 

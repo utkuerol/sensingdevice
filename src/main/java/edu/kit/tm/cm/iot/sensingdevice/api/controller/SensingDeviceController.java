@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.kit.tm.cm.iot.sensingdevice.api.SensingDeviceAPI;
-import edu.kit.tm.cm.iot.sensingdevice.api.dto.SensingDeviceDTO;
+import edu.kit.tm.cm.iot.sensingdevice.api.dto.requestObjects.CreateSensingDeviceRequestObject;
+import edu.kit.tm.cm.iot.sensingdevice.api.dto.responseObjects.SensingDeviceDTO;
 import edu.kit.tm.cm.iot.sensingdevice.logic.operations.SensingDeviceOperations;
 import edu.kit.tm.cm.iot.sensingdevice.logic.operations.exceptions.InvalidSensingDeviceException;
 import edu.kit.tm.cm.iot.sensingdevice.logic.operations.exceptions.SensingDeviceNotFoundException;
@@ -31,8 +32,9 @@ public class SensingDeviceController implements SensingDeviceAPI {
 
     @SneakyThrows
     @Override
-    public SensingDeviceDTO createDevice(String serialNumber, String manufacturer, String model) {
-        var createdDevice = sensingDeviceOperations.createSensingDevice(serialNumber, manufacturer, model);
+    public SensingDeviceDTO createDevice(CreateSensingDeviceRequestObject requestObject) {
+        var createdDevice = sensingDeviceOperations.createSensingDevice(requestObject.getSerialNumber(),
+                requestObject.getManufacturer(), requestObject.getModel());
         return new SensingDeviceDTO(createdDevice);
     }
 

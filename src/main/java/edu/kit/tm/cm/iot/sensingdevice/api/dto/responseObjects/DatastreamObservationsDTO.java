@@ -1,4 +1,4 @@
-package edu.kit.tm.cm.iot.sensingdevice.api.dto;
+package edu.kit.tm.cm.iot.sensingdevice.api.dto.responseObjects;
 
 import java.util.List;
 

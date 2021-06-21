@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import edu.kit.tm.cm.iot.sensingdevice.api.dto.SensingDeviceDTO;
+import edu.kit.tm.cm.iot.sensingdevice.api.dto.requestObjects.CreateSensingDeviceRequestObject;
+import edu.kit.tm.cm.iot.sensingdevice.api.dto.responseObjects.SensingDeviceDTO;
 
 @RequestMapping
 public interface SensingDeviceAPI {
@@ -22,8 +23,7 @@ public interface SensingDeviceAPI {
 
     @PostMapping("/devices")
     @ResponseStatus(HttpStatus.CREATED)
-    SensingDeviceDTO createDevice(@RequestBody String serialNumber, @RequestBody String manufacturer,
-            @RequestBody String model);
+    SensingDeviceDTO createDevice(@RequestBody CreateSensingDeviceRequestObject requestObject);
 
     @GetMapping("/devices/{deviceId}")
     @ResponseStatus(HttpStatus.OK)

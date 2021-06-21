@@ -46,7 +46,7 @@ components:
           description: A short description of the sensor about what is measures etc.
           example: Locates a device indoors using relative distances to installed BLE beacons
         metadata:
-          type: object
+          $ref: "#/components/schemas/AnyValue"
         datastreams:
           type: array
           items:
@@ -92,9 +92,9 @@ components:
           description: "Recorded time of the observation as defined by RFC 3339, section 5.6"
           example: "2021-01-21T17:32:28Z."
         value:
-          type: object
+          $ref: "#/components/schemas/AnyValue"
           example: {facilityName: Städtisches Klinikum Karlsruhe, roomName: C101.8, floorLevel: 1, coordinates: '(15.7, 42.0)'}
-
+    AnyValue: {}
 paths:
   /devices:
     get:
@@ -209,7 +209,7 @@ paths:
                   type: string
                   description: "a short description of the sensor about what is measures etc."
                 metadata:
-                  type: object
+                  $ref: "#/components/schemas/AnyValue"
       responses:
         "201":
           description: Created
@@ -310,7 +310,7 @@ paths:
                     type: object
                     $ref: "#/components/schemas/ObservedProperty"
                   value:
-                    type: object
+                    $ref: "#/components/schemas/AnyValue"
                     example: {facilityName: Städtisches Klinikum Karlsruhe, roomName: C101.8, floorLevel: 1, coordinates: '(15.7, 42.0)'}
         responses:
           "201":

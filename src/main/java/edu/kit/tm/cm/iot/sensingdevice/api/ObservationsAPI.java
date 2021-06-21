@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import edu.kit.tm.cm.iot.sensingdevice.api.dto.DatastreamObservationsDTO;
-import edu.kit.tm.cm.iot.sensingdevice.api.dto.ObservationDTO;
-import edu.kit.tm.cm.iot.sensingdevice.logic.model.ObservedProperty;
+import edu.kit.tm.cm.iot.sensingdevice.api.dto.requestObjects.CreateObservationRequestObject;
+import edu.kit.tm.cm.iot.sensingdevice.api.dto.responseObjects.DatastreamObservationsDTO;
+import edu.kit.tm.cm.iot.sensingdevice.api.dto.responseObjects.ObservationDTO;
 
 @RequestMapping
 public interface ObservationsAPI {
@@ -30,7 +30,7 @@ public interface ObservationsAPI {
         @PostMapping("/devices/{deviceId}/sensors/{sensorId}/observations")
         @ResponseStatus(HttpStatus.CREATED)
         ObservationDTO createSensorObservation(@PathVariable String deviceId, @PathVariable String sensorId,
-                        @RequestBody ObservedProperty observedProperty, @RequestBody String value);
+                        @RequestBody CreateObservationRequestObject requestObject);
 
         @GetMapping("/devices/{deviceId}/sensors/{sensorId}/observations/{observedProperty}")
         @ResponseStatus(HttpStatus.OK)
