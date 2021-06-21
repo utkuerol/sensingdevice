@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   title: SensingDevice REST API
-  version: "1.0"
+  version: "1.1"
   contact:
     email: utku.erol@student.kit.edu
 servers:
@@ -139,16 +139,16 @@ paths:
           description: Bad Request
         "403":
           description: Forbidden
-  /devices/{id}:
-    get:
-        description: Gets a sensing device.
-        summary: Gets a sensing device.
-        parameters:
+  /devices/{deviceId}:
+    parameters:
         - in: path
-          name: id
+          name: deviceId
           required: true
           schema:
             type: string
+    get:
+        description: Gets a sensing device.
+        summary: Gets a sensing device.
         responses:
           "200":
             description: OK
@@ -163,12 +163,6 @@ paths:
     delete:
       description: Deletes a sensing device.
       summary: Deletes a sensing device.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
       responses:
         "204":
           description: No Content
@@ -176,16 +170,16 @@ paths:
           description: Not Found
         "403":
           description: Forbidden        
-  /devices/{id}/sensors:
-    get:
-      summary: Gets all sensors belonging to the sensing device.
-      description: Gets all sensors belonging to the sensing device with their observed properties.
-      parameters:
+  /devices/{deviceId}/sensors:
+    parameters:
         - in: path
-          name: id
+          name: deviceId
           required: true
           schema:
             type: string
+    get:
+      summary: Gets all sensors belonging to the sensing device.
+      description: Gets all sensors belonging to the sensing device with their observed properties.
       responses:
         "200":
           description: OK
@@ -202,12 +196,6 @@ paths:
     post:
       description: Creates a new sensor belonging to the given sensing device and responds with the created entity.
       summary: Creates a new sensor belonging to the given sensing device.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
       requestBody:
         content:
           application/json:
@@ -233,7 +221,18 @@ paths:
           description: Bad Request
         "403":
           description: Forbidden
-  /devices/{id}/sensors/{id}:
+  /devices/{deviceId}/sensors/{sensorId}:
+    parameters:
+        - in: path
+          name: deviceId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: sensorId
+          required: true
+          schema:
+            type: string
     get:
         description: Gets a sensor.
         summary: Gets a sensor.
@@ -258,22 +257,23 @@ paths:
           description: Not Found
         "403":
           description: Forbidden        
-  /devices/{id}/sensors/{id}/observations:
+  /devices/{deviceId}/sensors/{sensorId}/observations:
+    parameters:
+        - in: path
+          name: deviceId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: sensorId
+          required: true
+          schema:
+            type: string
     get:
       summary: Gets all observations recorded by the sensor within the time range.
       description:
           Gets all observations recorded by the sensor within the time range.
       parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
         - in: query
           name: from
           schema:
@@ -300,17 +300,6 @@ paths:
     post:
         summary: Creates a new observation made by the sensor.
         description: Creates a new observation made by the sensor.
-        parameters:
-          - in: path
-            name: id
-            required: true
-            schema:
-              type: string
-          - in: path
-            name: id
-            required: true
-            schema:
-              type: integer
         requestBody:
           content:
             application/json:
@@ -334,7 +323,18 @@ paths:
             description: Bad Request
           "403":
             description: Forbidden
-  /devices/{id}/sensors/{id}/observations/{observed-property}:
+  /devices/{deviceId}/sensors/{sensorId}/observations/{observedProperty}:
+    parameters:
+        - in: path
+          name: deviceId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: sensorId
+          required: true
+          schema:
+            type: string
     get:
         summary: Gets all observations on an observed property made by the sensor within the time range.
         description:
@@ -343,17 +343,7 @@ paths:
           E.g. "indoor position" -> "indoor-position"
         parameters:
           - in: path
-            name: id
-            required: true
-            schema:
-              type: string
-          - in: path
-            name: id
-            required: true
-            schema:
-              type: string
-          - in: path
-            name: observed-property
+            name: observedProperty
             required: true
             schema:
               type: string
@@ -387,17 +377,7 @@ paths:
             E.g. "indoor position" -> "indoor-position"
           parameters:
             - in: path
-              name: id
-              required: true
-              schema:
-                type: string
-            - in: path
-              name: id
-              required: true
-              schema:
-                type: string
-            - in: path
-              name: observed-property
+              name: observedProperty
               required: true
               schema:
                 type: string
@@ -419,7 +399,13 @@ paths:
               description: No Content
             "403":
               description: Forbidden
-  /devices/{id}/observations/{observed-property}:
+  /devices/{deviceId}/observations/{observedProperty}:
+    parameters:
+        - in: path
+          name: deviceId
+          required: true
+          schema:
+            type: string
     get:
       summary: Gets all observations on an observed property of the sensing device within the time range.
       description:
@@ -428,12 +414,7 @@ paths:
         E.g. "indoor position" -> "indoor-position"
       parameters:
         - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: observed-property
+          name: observedProperty
           required: true
           schema:
             type: string
@@ -467,12 +448,7 @@ paths:
         E.g. "indoor position" -> "indoor-position"
       parameters:
         - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: observed-property
+          name: observedProperty
           required: true
           schema:
             type: string
