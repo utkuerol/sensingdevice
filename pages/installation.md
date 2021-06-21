@@ -6,8 +6,8 @@ You need a PostgreSQL instance running to start locally. To ease setting up the 
   - ```DB_USERNAME```
   - ```DB_PASSWORD```
 
-- Run ```make postgres``` at the project root 
+- Run ```$ make postgres``` at the project root 
   
 - Export a ```DB_URL```:
-  - ```export DB_URL=localhost:5432/```
+  - ```$ export DB_URL=localhost:5432/```
 
