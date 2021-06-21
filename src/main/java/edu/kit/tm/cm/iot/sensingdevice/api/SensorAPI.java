@@ -1,6 +1,6 @@
 package edu.kit.tm.cm.iot.sensingdevice.api;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import edu.kit.tm.cm.iot.sensingdevice.api.dto.SensorDTO;
 public interface SensorAPI {
 
     @GetMapping("/devices/{deviceId}/sensors")
-    List<SensorDTO> getSensors(@PathVariable String deviceId);
+    Collection<SensorDTO> getSensors(@PathVariable String deviceId);
 
     @PostMapping("/devices/{deviceId}/sensors")
     SensorDTO createSensor(@PathVariable String deviceId);

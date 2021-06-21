@@ -1,6 +1,6 @@
 package edu.kit.tm.cm.iot.sensingdevice.api;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ import edu.kit.tm.cm.iot.sensingdevice.api.dto.SensingDeviceDTO;
 public interface SensingDeviceAPI {
 
     @GetMapping("/devices")
-    List<SensingDeviceDTO> getDevices();
+    Collection<SensingDeviceDTO> getDevices();
 
     @PostMapping("/devices")
     SensingDeviceDTO createDevice(@RequestBody String serialNumber, @RequestBody String manufacturer,
