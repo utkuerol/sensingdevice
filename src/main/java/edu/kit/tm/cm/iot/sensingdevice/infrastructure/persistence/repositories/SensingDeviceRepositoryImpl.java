@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import edu.kit.tm.cm.iot.sensingdevice.infrastructure.persistence.mappers.SensingDeviceMapper;
 import edu.kit.tm.cm.iot.sensingdevice.infrastructure.persistence.repositories.dao.SensingDeviceDAO;
@@ -12,6 +13,7 @@ import edu.kit.tm.cm.iot.sensingdevice.logic.model.Datastream;
 import edu.kit.tm.cm.iot.sensingdevice.logic.model.SensingDevice;
 import edu.kit.tm.cm.iot.sensingdevice.logic.model.repositories.SensingDeviceRepository;
 
+@Repository
 public class SensingDeviceRepositoryImpl implements SensingDeviceRepository {
 
     @Autowired
@@ -25,8 +27,11 @@ public class SensingDeviceRepositoryImpl implements SensingDeviceRepository {
 
     @Override
     public Optional<SensingDevice> findById(String deviceId) {
-        var device = sensingDeviceDao.findByUuid(deviceId).stream().findFirst().get();
-        return Optional.of(SensingDeviceMapper.fromPersistenceEntity(device));
+        var device = sensingDeviceDao.findByUuid(deviceId).stream().findFirst();
+        if (device.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(SensingDeviceMapper.fromPersistenceEntity(device.get()));
     }
 
     @Override
@@ -37,16 +42,21 @@ public class SensingDeviceRepositoryImpl implements SensingDeviceRepository {
 
     @Override
     public void delete(SensingDevice sensingDevice) {
-        var sensingDevicePersistenceEntity = sensingDeviceDao.findByUuid(sensingDevice.getId()).stream().findFirst()
-                .get();
-        sensingDeviceDao.delete(sensingDevicePersistenceEntity);
+        var sensingDevicePersistenceEntity = sensingDeviceDao.findByUuid(sensingDevice.getId()).stream().findFirst();
+        if (sensingDevicePersistenceEntity.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        sensingDeviceDao.delete(sensingDevicePersistenceEntity.get());
     }
 
     @Override
     public void update(SensingDevice sensingDevice) {
-        var persistedState = sensingDeviceDao.findByUuid(sensingDevice.getId()).stream().findFirst().get();
+        var persistedState = sensingDeviceDao.findByUuid(sensingDevice.getId()).stream().findFirst();
+        if (persistedState.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
         var updatedState = SensingDeviceMapper.toPersistenceEntity(sensingDevice);
-        updatedState.setId(persistedState.getId());
+        updatedState.setId(persistedState.get().getId());
         sensingDeviceDao.save(updatedState);
     }
 
