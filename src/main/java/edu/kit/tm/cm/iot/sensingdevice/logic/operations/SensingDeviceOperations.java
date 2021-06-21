@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.kit.tm.cm.iot.sensingdevice.logic.model.SensingDevice;
 import edu.kit.tm.cm.iot.sensingdevice.logic.model.repositories.SensingDeviceRepository;
+import edu.kit.tm.cm.iot.sensingdevice.logic.operations.exceptions.InvalidSensingDeviceException;
 import edu.kit.tm.cm.iot.sensingdevice.logic.operations.exceptions.SensingDeviceNotFoundException;
 
 @Service
@@ -44,9 +45,16 @@ public class SensingDeviceOperations {
      * @param manufacturer
      * @param model
      * @return created SensingDevice entity
+     * @throws InvalidSensingDeviceException
      */
-    public SensingDevice createSensingDevice(String serialNumber, String manufacturer, String model) {
-        var sensingDevice = new SensingDevice(serialNumber, manufacturer, model);
+    public SensingDevice createSensingDevice(String serialNumber, String manufacturer, String model)
+            throws InvalidSensingDeviceException {
+        SensingDevice sensingDevice;
+        try {
+            sensingDevice = new SensingDevice(serialNumber, manufacturer, model);
+        } catch (Exception e) {
+            throw new InvalidSensingDeviceException();
+        }
         sensingDeviceRepository.create(sensingDevice);
         return sensingDevice;
     }

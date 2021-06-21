@@ -15,6 +15,7 @@ import edu.kit.tm.cm.iot.sensingdevice.infrastructure.persistence.repositories.S
 import edu.kit.tm.cm.iot.sensingdevice.logic.model.SensingDevice;
 import edu.kit.tm.cm.iot.sensingdevice.logic.model.Sensor;
 import edu.kit.tm.cm.iot.sensingdevice.logic.model.repositories.SensingDeviceRepository;
+import edu.kit.tm.cm.iot.sensingdevice.logic.operations.exceptions.InvalidSensorException;
 import edu.kit.tm.cm.iot.sensingdevice.logic.operations.exceptions.SensingDeviceNotFoundException;
 import edu.kit.tm.cm.iot.sensingdevice.logic.operations.exceptions.SensorNotFoundException;
 
@@ -39,7 +40,7 @@ public class SensorOperationsUnitTests {
                 () -> sensorOperations.addSensor("id", "sensorName", "sensorDescription", "sensorMetadata"));
         when(mockRepository.findById(id)).thenReturn(Optional.of(sensingDevice));
         assertAll(() -> sensorOperations.addSensor(id, "sensorName", "sensorDescription", "sensorMetadata"));
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(InvalidSensorException.class,
                 () -> sensorOperations.addSensor(id, "", "sensorDescription", "sensorMetadata"));
     }
 
@@ -60,7 +61,7 @@ public class SensorOperationsUnitTests {
         when(mockRepository.findById(id)).thenReturn(Optional.of(sensingDevice));
 
         // name must not be empty
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(InvalidSensorException.class,
                 () -> sensorOperations.updateSensor(id, "id", "", "sensorDescription", "sensorMetadata"));
 
         // sensor does not exist
