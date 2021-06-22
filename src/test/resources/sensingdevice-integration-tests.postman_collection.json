@@ -1,0 +1,2227 @@
+{
+	"info": {
+		"_postman_id": "584368d7-e7c4-4180-9905-fbbba0db9f77",
+		"name": "SensingDevice API Integration Tests",
+		"description": "Contact Support:\n Email: utku.erol@student.kit.edu",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "createDevice",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code name has string\", function () {",
+							"    pm.response.to.have.status(\"Created\");",
+							"});",
+							"",
+							"pm.test(\"UUID of the created SensingDevice is returned\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"id\");",
+							"});",
+							"",
+							"pm.collectionVariables.set(\"deviceId\", pm.response.json().id);",
+							"pm.collectionVariables.set(\"deviceSerialNumber\", pm.response.json().serialNumber);",
+							"",
+							"postman.setNextRequest(\"getDevices\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"serialNumber\": \"C02TXHZUHV29\",\n    \"manufacturer\": \"cillum dolore nulla\",\n    \"model\": \"sunt labore in\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/devices",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"devices"
+					]
+				},
+				"description": "Creates a new sensing device."
+			},
+			"response": [
+				{
+					"name": "Created",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"serialNumber\": \"id\",\n    \"manufacturer\": \"cillum dolore nulla\",\n    \"model\": \"sunt labore in\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/devices",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n \"id\": \"est culpa proident tempor\",\n \"serialNumber\": \"C02TXHZUHV29\",\n \"manufacturer\": \"Siemens\",\n \"model\": \"MAGNETOM Free.Max\",\n \"sensors\": [\n  {\n   \"id\": \"2\",\n   \"name\": \"BOSCH BLE Tag\",\n   \"description\": \"Locates a device indoors using relative distances to installed BLE beacons\",\n   \"metadata\": {},\n   \"datastreams\": [\n    {\n     \"observedProperty\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n     }\n    },\n    {\n     \"observedProperty\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n     }\n    }\n   ]\n  },\n  {\n   \"id\": \"2\",\n   \"name\": \"BOSCH BLE Tag\",\n   \"description\": \"Locates a device indoors using relative distances to installed BLE beacons\",\n   \"metadata\": {},\n   \"datastreams\": [\n    {\n     \"observedProperty\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n     }\n    },\n    {\n     \"observedProperty\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n     }\n    }\n   ]\n  }\n ]\n}"
+				},
+				{
+					"name": "Bad Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"serialNumber\": \"id\",\n    \"manufacturer\": \"cillum dolore nulla\",\n    \"model\": \"sunt labore in\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/devices",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Forbidden",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"serialNumber\": \"id\",\n    \"manufacturer\": \"cillum dolore nulla\",\n    \"model\": \"sunt labore in\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/devices",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices"
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "getDevices",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"postman.setNextRequest(\"getDevice\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/devices",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"devices"
+					]
+				},
+				"description": "Gets all sensing devices."
+			},
+			"response": [
+				{
+					"name": "OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "[\n {\n  \"id\": \"in\",\n  \"serialNumber\": \"C02TXHZUHV29\",\n  \"manufacturer\": \"Siemens\",\n  \"model\": \"MAGNETOM Free.Max\",\n  \"sensors\": [\n   {\n    \"id\": \"2\",\n    \"name\": \"BOSCH BLE Tag\",\n    \"description\": \"Locates a device indoors using relative distances to installed BLE beacons\",\n    \"metadata\": {},\n    \"datastreams\": [\n     {\n      \"observedProperty\": {\n       \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n     },\n     {\n      \"observedProperty\": {\n       \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n     }\n    ]\n   },\n   {\n    \"id\": \"2\",\n    \"name\": \"BOSCH BLE Tag\",\n    \"description\": \"Locates a device indoors using relative distances to installed BLE beacons\",\n    \"metadata\": {},\n    \"datastreams\": [\n     {\n      \"observedProperty\": {\n       \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n     },\n     {\n      \"observedProperty\": {\n       \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n     }\n    ]\n   }\n  ]\n },\n {\n  \"id\": \"tempor ad non enim do\",\n  \"serialNumber\": \"C02TXHZUHV29\",\n  \"manufacturer\": \"Siemens\",\n  \"model\": \"MAGNETOM Free.Max\",\n  \"sensors\": [\n   {\n    \"id\": \"2\",\n    \"name\": \"BOSCH BLE Tag\",\n    \"description\": \"Locates a device indoors using relative distances to installed BLE beacons\",\n    \"metadata\": {},\n    \"datastreams\": [\n     {\n      \"observedProperty\": {\n       \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n     },\n     {\n      \"observedProperty\": {\n       \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n     }\n    ]\n   },\n   {\n    \"id\": \"2\",\n    \"name\": \"BOSCH BLE Tag\",\n    \"description\": \"Locates a device indoors using relative distances to installed BLE beacons\",\n    \"metadata\": {},\n    \"datastreams\": [\n     {\n      \"observedProperty\": {\n       \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n     },\n     {\n      \"observedProperty\": {\n       \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n     }\n    ]\n   }\n  ]\n }\n]"
+				},
+				{
+					"name": "Forbidden",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices"
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Not Found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "getDevice",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"SerialNumber is returned correctly\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.serialNumber).to.eql(pm.variables.get(\"deviceSerialNumber\"));",
+							"});",
+							"",
+							"postman.setNextRequest(\"createSensor\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/devices/:deviceId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"devices",
+						":deviceId"
+					],
+					"variable": [
+						{
+							"key": "deviceId",
+							"value": "{{deviceId}}",
+							"description": "(Required) "
+						}
+					]
+				},
+				"description": "Gets a sensing device."
+			},
+			"response": [
+				{
+					"name": "OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n \"id\": \"est culpa proident tempor\",\n \"serialNumber\": \"C02TXHZUHV29\",\n \"manufacturer\": \"Siemens\",\n \"model\": \"MAGNETOM Free.Max\",\n \"sensors\": [\n  {\n   \"id\": \"2\",\n   \"name\": \"BOSCH BLE Tag\",\n   \"description\": \"Locates a device indoors using relative distances to installed BLE beacons\",\n   \"metadata\": {},\n   \"datastreams\": [\n    {\n     \"observedProperty\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n     }\n    },\n    {\n     \"observedProperty\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n     }\n    }\n   ]\n  },\n  {\n   \"id\": \"2\",\n   \"name\": \"BOSCH BLE Tag\",\n   \"description\": \"Locates a device indoors using relative distances to installed BLE beacons\",\n   \"metadata\": {},\n   \"datastreams\": [\n    {\n     \"observedProperty\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n     }\n    },\n    {\n     \"observedProperty\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n     }\n    }\n   ]\n  }\n ]\n}"
+				},
+				{
+					"name": "Forbidden",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Not Found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "createSensor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201]);",
+							"});",
+							"",
+							"pm.test(\"Status code name has string\", function () {",
+							"    pm.response.to.have.status(\"Created\");",
+							"});",
+							"",
+							"pm.collectionVariables.set(\"sensorId\", pm.response.json().id);",
+							"",
+							"postman.setNextRequest(\"getSensors\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"esse nostrud qui\",\n    \"description\": \"sed laborum occaecat ut\",\n    \"metadata\": {}\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/devices/:deviceId/sensors",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"devices",
+						":deviceId",
+						"sensors"
+					],
+					"variable": [
+						{
+							"key": "deviceId",
+							"value": "{{deviceId}}",
+							"description": "(Required) "
+						}
+					]
+				},
+				"description": "Creates a new sensor belonging to the given sensing device and responds with the created entity."
+			},
+			"response": [
+				{
+					"name": "Created",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"esse nostrud qui\",\n    \"description\": \"sed laborum occaecat ut\",\n    \"metadata\": {}\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								}
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n \"id\": \"2\",\n \"name\": \"BOSCH BLE Tag\",\n \"description\": \"Locates a device indoors using relative distances to installed BLE beacons\",\n \"metadata\": {},\n \"datastreams\": [\n  {\n   \"observedProperty\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n   }\n  },\n  {\n   \"observedProperty\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n   }\n  }\n ]\n}"
+				},
+				{
+					"name": "Bad Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"esse nostrud qui\",\n    \"description\": \"sed laborum occaecat ut\",\n    \"metadata\": {}\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Forbidden",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"esse nostrud qui\",\n    \"description\": \"sed laborum occaecat ut\",\n    \"metadata\": {}\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "getSensors",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"postman.setNextRequest(\"getSensor\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/devices/:deviceId/sensors",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"devices",
+						":deviceId",
+						"sensors"
+					],
+					"variable": [
+						{
+							"key": "deviceId",
+							"value": "{{deviceId}}",
+							"description": "(Required) "
+						}
+					]
+				},
+				"description": "Gets all sensors belonging to the sensing device with their observed properties."
+			},
+			"response": [
+				{
+					"name": "OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "[\n {\n  \"id\": \"2\",\n  \"name\": \"BOSCH BLE Tag\",\n  \"description\": \"Locates a device indoors using relative distances to installed BLE beacons\",\n  \"metadata\": {},\n  \"datastreams\": [\n   {\n    \"observedProperty\": {\n     \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n   },\n   {\n    \"observedProperty\": {\n     \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n   }\n  ]\n },\n {\n  \"id\": \"2\",\n  \"name\": \"BOSCH BLE Tag\",\n  \"description\": \"Locates a device indoors using relative distances to installed BLE beacons\",\n  \"metadata\": {},\n  \"datastreams\": [\n   {\n    \"observedProperty\": {\n     \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n   },\n   {\n    \"observedProperty\": {\n     \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n   }\n  ]\n }\n]"
+				},
+				{
+					"name": "Forbidden",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Not Found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "getSensor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Created Sensor is successfully received via GET\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"sensorId\"));",
+							"});",
+							"",
+							"postman.setNextRequest(\"createObservation\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"devices",
+						":deviceId",
+						"sensors",
+						":sensorId"
+					],
+					"variable": [
+						{
+							"key": "deviceId",
+							"value": "{{deviceId}}",
+							"description": "(Required) "
+						},
+						{
+							"key": "sensorId",
+							"value": "{{sensorId}}",
+							"description": "(Required) "
+						}
+					]
+				},
+				"description": "Gets a sensor."
+			},
+			"response": [
+				{
+					"name": "OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors",
+								":sensorId"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "sensorId"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n \"id\": \"2\",\n \"name\": \"BOSCH BLE Tag\",\n \"description\": \"Locates a device indoors using relative distances to installed BLE beacons\",\n \"metadata\": {},\n \"datastreams\": [\n  {\n   \"observedProperty\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n   }\n  },\n  {\n   \"observedProperty\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n   }\n  }\n ]\n}"
+				},
+				{
+					"name": "Forbidden",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors",
+								":sensorId"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "sensorId"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Not Found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors",
+								":sensorId"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "sensorId"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "createObservation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"postman.setNextRequest(\"getSensorObservations\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"observedProperty\": {\n        \"name\": \"indoor-position\",\n        \"description\": \"Indoor position includes the facility name, room name, floor level and 2D in-room coordinates of a device. Check the middleware documentation at https://fake-middleware-devicelocator.com.\",\n        \"unitOfMeasurement\": \"indoor position (check the middleware documentation for the data structure  at https://fake-middleware-devicelocator.com)\"\n    },\n    \"value\": {\n        \"building\": \"Städtisches Klinikum Karlsruhe\",\n        \"level\": \"-1\",\n        \"room\": \"101\",\n        \"inRoomCoordinates\": \"42.0,42.0\"\n    }\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId/observations",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"devices",
+						":deviceId",
+						"sensors",
+						":sensorId",
+						"observations"
+					],
+					"variable": [
+						{
+							"key": "deviceId",
+							"value": "{{deviceId}}",
+							"description": "(Required) "
+						},
+						{
+							"key": "sensorId",
+							"value": "{{sensorId}}",
+							"description": "(Required) "
+						}
+					]
+				},
+				"description": "Creates a new observation made by the sensor."
+			},
+			"response": [
+				{
+					"name": "Created",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"observedProperty\": {\n        \"name\": \"indoor position\",\n        \"description\": \"Indoor position includes the facility name, room name, floor level and 2D in-room coordinates of a device. Check the middleware documentation at https://fake-middleware-devicelocator.com.\",\n        \"unitOfMeasurement\": \"indoor position (check the middleware documentation for the data structure  at https://fake-middleware-devicelocator.com)\"\n    },\n    \"value\": {}\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId/observations",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors",
+								":sensorId",
+								"observations"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "sensorId"
+								}
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n \"timestamp\": \"1951-12-16T02:04:06.878Z\",\n \"value\": {}\n}"
+				},
+				{
+					"name": "Bad Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"observedProperty\": {\n        \"name\": \"indoor position\",\n        \"description\": \"Indoor position includes the facility name, room name, floor level and 2D in-room coordinates of a device. Check the middleware documentation at https://fake-middleware-devicelocator.com.\",\n        \"unitOfMeasurement\": \"indoor position (check the middleware documentation for the data structure  at https://fake-middleware-devicelocator.com)\"\n    },\n    \"value\": {}\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId/observations",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors",
+								":sensorId",
+								"observations"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "sensorId"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Forbidden",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"observedProperty\": {\n        \"name\": \"indoor position\",\n        \"description\": \"Indoor position includes the facility name, room name, floor level and 2D in-room coordinates of a device. Check the middleware documentation at https://fake-middleware-devicelocator.com.\",\n        \"unitOfMeasurement\": \"indoor position (check the middleware documentation for the data structure  at https://fake-middleware-devicelocator.com)\"\n    },\n    \"value\": {}\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId/observations",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors",
+								":sensorId",
+								"observations"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "sensorId"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "getSensorObservationsWithObservedProperty",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"All sensor observations are found\", function () {",
+							"    var size = pm.response.json().size;",
+							"    pm.expect(size).to.eql(1);",
+							"});",
+							"",
+							"postman.setNextRequest(\"getAllObservationsWithObservedProperty\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId/observations/:observedProperty",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"devices",
+						":deviceId",
+						"sensors",
+						":sensorId",
+						"observations",
+						":observedProperty"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "1981-08-09T20:30:27.548Z",
+							"disabled": true
+						},
+						{
+							"key": "to",
+							"value": "1981-08-09T20:30:27.548Z",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "deviceId",
+							"value": "{{deviceId}}",
+							"description": "(Required) "
+						},
+						{
+							"key": "sensorId",
+							"value": "{{sensorId}}",
+							"description": "(Required) "
+						},
+						{
+							"key": "observedProperty",
+							"value": "indoor-position",
+							"description": "(Required) "
+						}
+					]
+				},
+				"description": "Gets all observations on an observed property of the sensing device made by the sensor within the time range. observed-property is the name of the observed property written in kebab-case. E.g. \"indoor position\" -> \"indoor-position\""
+			},
+			"response": [
+				{
+					"name": "OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId/observations/:observedProperty?from=1981-08-09T20:30:27.548Z&to=1981-08-09T20:30:27.548Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors",
+								":sensorId",
+								"observations",
+								":observedProperty"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "1981-08-09T20:30:27.548Z"
+								},
+								{
+									"key": "to",
+									"value": "1981-08-09T20:30:27.548Z"
+								}
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "sensorId"
+								},
+								{
+									"key": "observedProperty"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n \"observedProperty\": {\n  \"name\": \"indoor position\",\n  \"description\": \"Indoor position includes the facility name, room name, floor level and 2D in-room coordinates of a device. Check the middleware documentation at https://fake-middleware-devicelocator.com.\",\n  \"unitOfMeasurement\": \"indoor position (check the middleware documentation for the data structure  at https://fake-middleware-devicelocator.com)\"\n },\n \"observations\": [\n  {\n   \"timestamp\": \"1982-01-19T02:30:40.144Z\",\n   \"value\": {}\n  },\n  {\n   \"timestamp\": \"2008-09-30T07:19:16.276Z\",\n   \"value\": {}\n  }\n ]\n}"
+				},
+				{
+					"name": "Forbidden",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId/observations/:observedProperty?from=1981-08-09T20:30:27.548Z&to=1981-08-09T20:30:27.548Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors",
+								":sensorId",
+								"observations",
+								":observedProperty"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "1981-08-09T20:30:27.548Z"
+								},
+								{
+									"key": "to",
+									"value": "1981-08-09T20:30:27.548Z"
+								}
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "sensorId"
+								},
+								{
+									"key": "observedProperty"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Not Found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId/observations/:observedProperty?from=1981-08-09T20:30:27.548Z&to=1981-08-09T20:30:27.548Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors",
+								":sensorId",
+								"observations",
+								":observedProperty"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "1981-08-09T20:30:27.548Z"
+								},
+								{
+									"key": "to",
+									"value": "1981-08-09T20:30:27.548Z"
+								}
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "sensorId"
+								},
+								{
+									"key": "observedProperty"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "getSensorObservations",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"indoor position datastream is found\", function () {",
+							"    var jsonData = pm.response.json()[0];",
+							"    pm.expect(jsonData.observedProperty.name).to.eql(\"indoor-position\");",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"indoor-position\");",
+							"});",
+							"",
+							"postman.setNextRequest(\"deleteDevice\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId/observations",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"devices",
+						":deviceId",
+						"sensors",
+						":sensorId",
+						"observations"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "1981-08-09T20:30:27.548Z",
+							"disabled": true
+						},
+						{
+							"key": "to",
+							"value": "1981-08-09T20:30:27.548Z",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "deviceId",
+							"value": "{{deviceId}}",
+							"description": "(Required) "
+						},
+						{
+							"key": "sensorId",
+							"value": "{{sensorId}}",
+							"description": "(Required) "
+						}
+					]
+				},
+				"description": "Gets all observations recorded by the sensor within the time range."
+			},
+			"response": [
+				{
+					"name": "OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId/observations?from=1981-08-09T20:30:27.548Z&to=1981-08-09T20:30:27.548Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors",
+								":sensorId",
+								"observations"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "1981-08-09T20:30:27.548Z"
+								},
+								{
+									"key": "to",
+									"value": "1981-08-09T20:30:27.548Z"
+								}
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "sensorId"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "[\n {\n  \"observedProperty\": {\n   \"name\": \"indoor position\",\n   \"description\": \"Indoor position includes the facility name, room name, floor level and 2D in-room coordinates of a device. Check the middleware documentation at https://fake-middleware-devicelocator.com.\",\n   \"unitOfMeasurement\": \"indoor position (check the middleware documentation for the data structure  at https://fake-middleware-devicelocator.com)\"\n  },\n  \"observations\": [\n   {\n    \"timestamp\": \"2006-10-19T00:43:12.055Z\",\n    \"value\": {}\n   },\n   {\n    \"timestamp\": \"1961-01-12T02:47:46.694Z\",\n    \"value\": {}\n   }\n  ]\n },\n {\n  \"observedProperty\": {\n   \"name\": \"indoor position\",\n   \"description\": \"Indoor position includes the facility name, room name, floor level and 2D in-room coordinates of a device. Check the middleware documentation at https://fake-middleware-devicelocator.com.\",\n   \"unitOfMeasurement\": \"indoor position (check the middleware documentation for the data structure  at https://fake-middleware-devicelocator.com)\"\n  },\n  \"observations\": [\n   {\n    \"timestamp\": \"2009-08-05T06:36:12.033Z\",\n    \"value\": {}\n   },\n   {\n    \"timestamp\": \"1949-10-21T05:15:46.806Z\",\n    \"value\": {}\n   }\n  ]\n }\n]"
+				},
+				{
+					"name": "Forbidden",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId/observations?from=1981-08-09T20:30:27.548Z&to=1981-08-09T20:30:27.548Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors",
+								":sensorId",
+								"observations"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "1981-08-09T20:30:27.548Z"
+								},
+								{
+									"key": "to",
+									"value": "1981-08-09T20:30:27.548Z"
+								}
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "sensorId"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Not Found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId/observations?from=1981-08-09T20:30:27.548Z&to=1981-08-09T20:30:27.548Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors",
+								":sensorId",
+								"observations"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "1981-08-09T20:30:27.548Z"
+								},
+								{
+									"key": "to",
+									"value": "1981-08-09T20:30:27.548Z"
+								}
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "sensorId"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "getAllObservationsWithObservedProperty",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"All observations are found\", function () {",
+							"    var size = pm.response.json();",
+							"    pm.expect(size).to.eql(1);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/devices/:deviceId/observations/:observedProperty",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"devices",
+						":deviceId",
+						"observations",
+						":observedProperty"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "1981-08-09T20:30:27.548Z",
+							"disabled": true
+						},
+						{
+							"key": "to",
+							"value": "1981-08-09T20:30:27.548Z",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "deviceId",
+							"value": "{{deviceId}}",
+							"description": "(Required) "
+						},
+						{
+							"key": "observedProperty",
+							"value": "indoor-position",
+							"description": "(Required) "
+						}
+					]
+				},
+				"description": "Gets all observations on an observed property of the sensing device within the time range. observed-property is the name of the observed property written in kebab-case. E.g. \"indoor position\" -> \"indoor-position\""
+			},
+			"response": [
+				{
+					"name": "OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/observations/:observedProperty?from=1981-08-09T20:30:27.548Z&to=1981-08-09T20:30:27.548Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"observations",
+								":observedProperty"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "1981-08-09T20:30:27.548Z"
+								},
+								{
+									"key": "to",
+									"value": "1981-08-09T20:30:27.548Z"
+								}
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "observedProperty"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n \"observedProperty\": {\n  \"name\": \"indoor position\",\n  \"description\": \"Indoor position includes the facility name, room name, floor level and 2D in-room coordinates of a device. Check the middleware documentation at https://fake-middleware-devicelocator.com.\",\n  \"unitOfMeasurement\": \"indoor position (check the middleware documentation for the data structure  at https://fake-middleware-devicelocator.com)\"\n },\n \"observations\": [\n  {\n   \"timestamp\": \"1982-01-19T02:30:40.144Z\",\n   \"value\": {}\n  },\n  {\n   \"timestamp\": \"2008-09-30T07:19:16.276Z\",\n   \"value\": {}\n  }\n ]\n}"
+				},
+				{
+					"name": "Forbidden",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/observations/:observedProperty?from=1981-08-09T20:30:27.548Z&to=1981-08-09T20:30:27.548Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"observations",
+								":observedProperty"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "1981-08-09T20:30:27.548Z"
+								},
+								{
+									"key": "to",
+									"value": "1981-08-09T20:30:27.548Z"
+								}
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "observedProperty"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Not Found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/observations/:observedProperty?from=1981-08-09T20:30:27.548Z&to=1981-08-09T20:30:27.548Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"observations",
+								":observedProperty"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "1981-08-09T20:30:27.548Z"
+								},
+								{
+									"key": "to",
+									"value": "1981-08-09T20:30:27.548Z"
+								}
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "observedProperty"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "deleteDevice",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"postman.setNextRequest(null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/devices/:deviceId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"devices",
+						":deviceId"
+					],
+					"variable": [
+						{
+							"key": "deviceId",
+							"value": "{{deviceId}}",
+							"description": "(Required) "
+						}
+					]
+				},
+				"description": "Deletes a sensing device."
+			},
+			"response": [
+				{
+					"name": "No Content",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								}
+							]
+						}
+					},
+					"status": "No Content",
+					"code": 204,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Forbidden",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Not Found",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "deleteSensor",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"devices",
+						":deviceId",
+						"sensors",
+						":sensorId"
+					],
+					"variable": [
+						{
+							"key": "deviceId",
+							"value": "ullamco",
+							"description": "(Required) "
+						},
+						{
+							"key": "sensorId",
+							"value": "ullamco",
+							"description": "(Required) "
+						}
+					]
+				},
+				"description": "Deletes a sensor."
+			},
+			"response": [
+				{
+					"name": "No Content",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors",
+								":sensorId"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "sensorId"
+								}
+							]
+						}
+					},
+					"status": "No Content",
+					"code": 204,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Forbidden",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors",
+								":sensorId"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "sensorId"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Not Found",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/sensors/:sensorId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"sensors",
+								":sensorId"
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "sensorId"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "deleteAllObservationsWithObservedProperty",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/devices/:deviceId/observations/:observedProperty?from=1981-08-09T20:30:27.548Z&to=1981-08-09T20:30:27.548Z",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"devices",
+						":deviceId",
+						"observations",
+						":observedProperty"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "1981-08-09T20:30:27.548Z",
+							"description": "(Required) "
+						},
+						{
+							"key": "to",
+							"value": "1981-08-09T20:30:27.548Z",
+							"description": "(Required) "
+						}
+					],
+					"variable": [
+						{
+							"key": "observedProperty",
+							"value": "ullamco",
+							"description": "(Required) "
+						},
+						{
+							"key": "deviceId",
+							"value": "ullamco",
+							"description": "(Required) "
+						}
+					]
+				},
+				"description": "Deletes all observations from a datastream within the time range. observed-property is the name of the observed property written in kebab-case. E.g. \"indoor position\" -> \"indoor-position\""
+			},
+			"response": [
+				{
+					"name": "No Content",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/observations/:observedProperty?from=1981-08-09T20:30:27.548Z&to=1981-08-09T20:30:27.548Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"observations",
+								":observedProperty"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "1981-08-09T20:30:27.548Z"
+								},
+								{
+									"key": "to",
+									"value": "1981-08-09T20:30:27.548Z"
+								}
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "observedProperty"
+								}
+							]
+						}
+					},
+					"status": "No Content",
+					"code": 204,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Forbidden",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:deviceId/observations/:observedProperty?from=1981-08-09T20:30:27.548Z&to=1981-08-09T20:30:27.548Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":deviceId",
+								"observations",
+								":observedProperty"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "1981-08-09T20:30:27.548Z"
+								},
+								{
+									"key": "to",
+									"value": "1981-08-09T20:30:27.548Z"
+								}
+							],
+							"variable": [
+								{
+									"key": "deviceId"
+								},
+								{
+									"key": "observedProperty"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "localhost:8080"
+		},
+		{
+			"key": "deviceId",
+			"value": ""
+		},
+		{
+			"key": "deviceSerialNumber",
+			"value": ""
+		},
+		{
+			"key": "sensorId",
+			"value": ""
+		}
+	]
+}
