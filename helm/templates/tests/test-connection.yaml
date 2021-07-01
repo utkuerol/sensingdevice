@@ -1,9 +1,10 @@
+# helm hook to test the connection, use busybox to execute command wget and download the 'page' of service 
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "maventemplate.fullname" . }}-test-connection"
+  name: "{{ include "sensingdevice.fullname" . }}-test-connection"
   labels:
-    {{- include "maventemplate.labels" . | nindent 4 }}
+{{ include "sensingdevice.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test-success
 spec:
@@ -11,5 +12,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "maventemplate.fullname" . }}:{{ .Values.service.port }}']
+      args:  ['{{ include "sensingdevice.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never

@@ -1,6 +1,6 @@
 apiVersion: v2
-name: maventemplate
-description: A Helm chart for Kubernetes
+name: sensingdevice
+description: A Central Helm chart for Kubernetes with default settings which is shared within project templates
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -19,3 +19,13 @@ version: 0.1.0
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
 appVersion: 1.16.0
+
+dependencies:
+  - name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 8.x.x
+    condition: postgresql.enabled
+  - name: mongodb
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.x.x
+    condition: mongodb.enabled 
