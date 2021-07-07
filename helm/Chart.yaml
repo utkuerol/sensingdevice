@@ -1,6 +1,6 @@
 apiVersion: v2
-name: sensingdevice
-description: A Central Helm chart for Kubernetes with default settings which is shared within project templates
+name: maventemplate
+description: A project template for Maven
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -21,11 +21,6 @@ version: 0.1.0
 appVersion: 1.16.0
 
 dependencies:
-  - name: postgresql
-    repository: https://charts.bitnami.com/bitnami
-    version: 8.x.x
-    condition: postgresql.enabled
-  - name: mongodb
-    repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
-    condition: mongodb.enabled 
+  - name: template-chart
+    repository: http://cm-infra-chart.cloud.iai.kit.edu
+    version: 0.0.0-09e27974
