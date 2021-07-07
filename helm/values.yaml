@@ -67,7 +67,7 @@ template-chart:
   affinity: {}
 
   postgresql:
-    enabled: false
+    enabled: true
     resources:
       limits:
         cpu: 100m
