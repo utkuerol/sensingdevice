@@ -17,4 +17,4 @@ include:
     - local: 'variables.yaml'
     
 chart:
-  image: iai-artifactory.iai.kit.edu/docker-cm/iai-pipeline:d83713e0
+  image: iai-artifactory.iai.kit.edu/docker-cm/iai-pipeline:2387477a
