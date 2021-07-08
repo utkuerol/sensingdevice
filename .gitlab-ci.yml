@@ -16,3 +16,5 @@ include:
       file : maven.yaml
     - local: 'variables.yaml'
     
+chart:
+  image: iai-artifactory.iai.kit.edu/docker-cm/iai-pipeline:d83713e0
