@@ -14,6 +14,7 @@ components:
       properties:
         id:
           type: string
+          description: Limited to ASCII-only characters.
         serialNumber:
           type: string
           description: Manufacturing ID given to the device by the manufacturer, unique per manufacturer and type.
@@ -35,8 +36,7 @@ components:
       properties:
         id:
           type: string
-          description: Local id of a sensor. Unique per sensing device.
-          example: "2"
+          description: Local id of a sensor. Unique per sensing device. Limited to ASCII-only characters.
         name:
           type: string
           description: Name of the sensor, usually the model name provided by the manufacturer.
