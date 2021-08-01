@@ -1,8 +1,6 @@
 # **SensingDevice** Domain Microservice
 
-`<Description>`
-
-*Guidelines for the creation of the artifacts are available in the GitLab documentation [Artifact Guidelines](https://git.scc.kit.edu/cm-tm/cm-team/1-1.cmdocumentation/3.artifactguidelines)*
+IoT microservice for managing sensor data developed as part of a practical course at Karlsruhe Institute of Technology in the research group [Cooperation and Management](https://cm.tm.kit.edu/english/). The data model is inspired by the IoT standard OGC SensorThings API. 
 
 ## Design
 
@@ -16,19 +14,9 @@
 
  [Local Installation](pages/installation.md)
 
- [DevOps Template Configuration](pages/devops.md)
-
  [Unit Tests](pages/unit_tests.md)
 
  [Integration Tests](pages/integration_tests.md)
 
-
-## Organization
-
-*Documentation Template Version 1.0.0*
-
-| Documentation Responsible | Start     | End       |
-| ------------------------- | --------- | --------- |
-| Utku Erol                 | 10.6.2021 | 23.7.2021 |
 
 
